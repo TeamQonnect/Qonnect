@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qonnect • Question</title>
+  <link rel="icon" type="image/x-icon" href="./media/qnct.png">
+  <link rel="stylesheet" href="./styles/question.css">
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-chubby/css/uicons-solid-rounded.css'>  
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-brands/css/uicons-brands.css'>
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-straight/css/uicons-bold-straight.css'>
+</head>
+<body>
+
+  <div class="container">
+    
+    <nav>
+      <div class="logoContainer">
+        <img id="logo1" src="./media/qnct.png"></img>
+        <img id="logo2" src="./media/qonnect.png"></img>
+      </div>
+      <div class="searchBar" id="searchBar">
+        <input type="search" id="searchInput" name="" placeholder="Search here">
+        <button id="search"><i class="fi fi-ss-search"></i></button>
+      </div>
+      <div class="ask">
+        <button id="ask">Ask Question</button>
+      </div>
+      <div class="menu" id="mobileOptions">
+        <button id="search2"><i class="fi fi-ss-search"></i></button>
+        <button id="menu"><i class="fi fi-ss-menu-burger"></i></button>
+      </div>
+    </nav>
+
+    <div class="middle">
+      <aside id="asideMenu">
+        <ul class="aside_list">
+          <li class="nav_li">MENU</li>
+          <br>
+          <li class="nav_li"><i class="fi fi-ss-home"></i><a href="">Home</a></li>
+          <li class="nav_li"><i class="fi fi-ss-employees"></i><a href="">Groups</a></li>
+          <li class="nav_li"><i class="fi fi-ss-info"></i><a href="">About</a></li>
+          <li class="nav_li"><i class="fi fi-ss-headset"></i><a href="#footer">Contact</a></li>
+          <li class="nav_li"><i class="fi fi-ss-user"></i><a href="">Profile</a></li>
+        </ul>
+      </aside>
+
+      <div class="middleContainer">
+
+
+        <div class="toolbar" id="toolbar">
+          <div class="head">
+            <label class="heading">Ask your Question</label>
+            <div class="precautionsContainer">
+              <div class="precautions">
+                <p><strong>♦ Qonnect Question Guidelines ♦</strong><br><br> • Ask questions related to academic and student issues.<br> • No foul language is encouraged and No debates over politics or fan-wars.<br> • <strong>NEVER SHARE YOUR PERSONAL INFORMATION</strong> (address, phone number, etc)<br> • Qonnect is based on mutual connection.<br> • Your question will be reviewed before posted for any guideline violations</p>
+              </div>
+            </div>
+            <label class="titleHint">Question title<span style="color: red;">*</span></label>
+            <p class="description">Enter the question</p>
+            <input type="text" placeholder="Enter title here" value="" id="filename">
+          </div>
+          <label class="titleHint">Describe your question below <span style="color: red;">*</span></label>
+          <p class="description">Select text and then buttons for text formatting</p>
+          <div class="btn-toolbar">
+            <button onclick="formatDoc('undo')"><img src="./media/icons/undo.svg" alt="Undo"></button>
+            <button onclick="formatDoc('redo')"><img src="./media/icons/redo.svg" alt="Redo"></button>
+            <button onclick="formatDoc('bold')"><img src="./media/icons/bold.svg" alt="Bold"></button>
+            <button onclick="formatDoc('underline')"><img src="./media/icons/underline.svg" alt="Underline"></button>
+            <button onclick="formatDoc('italic')"><img src="./media/icons/italic.svg" alt="Italic"></button>
+            <button onclick="formatDoc('strikeThrough')"><img src="./media/icons/strikethrough.svg" alt="Strikethrough"></button>
+            <button onclick="formatDoc('justifyLeft')"><img src="./media/icons/align_left.svg" alt="Align Left"></button>
+            <button onclick="formatDoc('justifyCenter')"><img src="./media/icons/align_center.svg" alt="Align Center"></button>
+            <button onclick="formatDoc('justifyRight')"><img src="./media/icons/align_right.svg" alt="Align Right"></button>
+            <button onclick="formatDoc('justifyFull')"><img src="./media/icons/align_justify.svg" alt="Align Full"></button>
+            <button onclick="formatDoc('insertOrderedList')"><img src="./media/icons/order_list.svg" alt="Order List"></button>
+            <button onclick="formatDoc('insertUnorderedList')"><img src="./media/icons/unorder_list.svg" alt="Unorder List"></button>
+            <button onclick="addLink()"><img src="./media/icons/link.svg" alt="Link"></button>
+            <button onclick="formatDoc('unlink')"><img src="./media/icons/unlink.svg" alt="Unlink"></button>
+          </div>
+        </div>
+        <div class="content">
+          <div id="content" contenteditable="true" spellcheck="false">
+          </div>
+        </div>
+        <label class="titleHint">Tags<span style="color: red;">*</span></label>
+        <p class="description" id="tagsPrompt">Specify maximum 5 tags describing your question (0/5)</p>
+        <input type="text" id="tagsInput" placeholder="Type tags and press Enter or comma" />
+        <div id="tag-input-container">
+        </div>
+
+        <div class="submitContainer">
+          <button id="submit"><img src="./media/icons/submit.svg" alt="Submit"><h5>Post Question</h5></button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="built">
+      <h1>Never<br>Give up</h1>
+      <div class="builtText">With <i>LOVE</i> from <strong>JNTUK</strong></div>
+    </div>
+
+
+    <footer id="footer">
+
+      <div class="footerDetails">
+        <div class="footerLogo">
+          <img src="./media/qonnect.png" alt="">
+        </div>
+
+        <div class="footerLinks">
+          <div class="social">
+            <p>Quick Links</p>
+            <a href="about.html">About</a>
+            <a href="orders.html">My Questions</a>
+            <a href="help.html">Profile</a>
+            <a href="faq.html">Groups</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footerEnd">
+        <p>All Uicons by <a href="https://www.flaticon.com/uicons">Flaticon</a></p>
+        <div class="documents">
+          
+          <a href="" title=""></a>
+          <a href="privacy.html" title="">Privacy Policy</a>
+          <a href="privacy.html" title="">Terms of Use</a>
+
+        </div>
+      </div>
+
+    </footer>
+
+  <script src="scripts/question.js" type="module" charset="utf-8" async defer></script>
+  </div>
+</body>
+</html>
