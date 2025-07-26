@@ -84,6 +84,7 @@ function selectedOption(){
 function logOut(){
   signOut(auth).then(() => {
     window.localStorage.setItem('QonnectUserLogIn', "false");
+    window.localStorage.setItem("QonnectUser", "");
     window.location.replace('login.html');
   }).catch((error) => {
     showToast('Oops!! Please try again later');
@@ -95,9 +96,9 @@ function updateName(){
   if (window.localStorage.getItem("QonnectUserLogIn") === "false" || window.localStorage.getItem("QonnectUserLogIn") === null) {
     window.location.replace('login.html');
   }else {
-
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        window.localStorage.setItem("QonnectUser", user.email);
         let randomInteger = getRandomInt(1, 10);
         document.getElementById('profile').src= "./media/profiles/"+randomInteger+".png";
         document.getElementById('username').innerHTML = user.displayName;
@@ -106,9 +107,7 @@ function updateName(){
         // No user is signed in.
         console.log("No user signed in.");
       }
-    });
-
-    
+    });    
   }
 }
 

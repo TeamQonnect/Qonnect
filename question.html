@@ -11,7 +11,6 @@
   <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-brands/css/uicons-brands.css'>
   <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
   <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-straight/css/uicons-bold-straight.css'>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
 </head>
 <body>
 
@@ -60,7 +59,7 @@
             </div>
             <label class="titleHint">Question title<span style="color: red;">*</span></label>
             <p class="description">Enter the question</p>
-            <input type="text" placeholder="Enter title here" value="" id="filename">
+            <input type="text" placeholder="Enter title here" value="" id="question">
           </div>
           <label class="titleHint">Describe your question below <span style="color: red;">*</span></label>
           <p class="description">Select text and then buttons for text formatting</p>
@@ -92,6 +91,7 @@
         </div>
 
         <div class="submitContainer">
+          <p class="description" id="postPrompt" style="color: red;"></p>
           <button id="submit"><img src="./media/icons/submit.svg" alt="Submit"><h5>Post Question</h5></button>
         </div>
 
@@ -103,6 +103,17 @@
       <div class="builtText">With <i>LOVE</i> from <strong>JNTUK</strong></div>
     </div>
 
+    <div class="modal-overlay" id="popup">
+      <div class="modal">
+        <div class="icon"><img src="./media/profiles/wink.png" alt="" id="icon"></div>
+        <h2 id="message">All Set!</h2>
+        <p id="messageBody">Your settings have been saved successfully.</p>
+        <div class="modal-buttons">
+          <button class="btn-secondary" id="cancelPrompt" onclick="hidePopup(false)">Cancel</button>
+          <button class="btn-primary" id="gotIt" onclick="hidePopup(true)">Got it</button>
+        </div>
+      </div>
+    </div>
 
     <footer id="footer">
 
