@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qonnect • Profile</title>
+  <link rel="icon" type="image/x-icon" href="./media/qnct.png">
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.2.0"></script>
+  <script src="tokenizer.js"></script>
+  <link rel="stylesheet" href="./styles/profile.css">
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-chubby/css/uicons-solid-rounded.css'>  
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-brands/css/uicons-brands.css'>
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-straight/css/uicons-bold-straight.css'>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+</head>
+<body>
+
+  <div class="container">
+    
+    <nav>
+      <div class="logoContainer">
+        <img id="logo1" src="./media/qnct.png"></img>
+        <img id="logo2" src="./media/qonnect.png"></img>
+      </div>
+      <div class="searchBar" id="searchBar">
+        <input type="search" id="searchInput" name="" placeholder="Search here">
+        <button id="search"><i class="fi fi-ss-search"></i></button>
+      </div>
+      <div class="ask">
+        <button id="ask">Ask Question</button>
+      </div>
+      <div class="menu" id="mobileOptions">
+        <button id="search2"><i class="fi fi-ss-search"></i></button>
+        <button id="menu"><i class="fi fi-ss-menu-burger"></i></button>
+      </div>
+    </nav>
+
+    <div class="middle">
+      <aside id="asideMenu">
+        <ul class="aside_list">
+          <li class="nav_li">MENU</li>
+          <br>
+          <li class="nav_li"><i class="fi fi-ss-home"></i><a href="">Home</a></li>
+          <li class="nav_li"><i class="fi fi-ss-employees"></i><a href="">Groups</a></li>
+          <li class="nav_li"><i class="fi fi-ss-info"></i><a href="">About</a></li>
+          <li class="nav_li"><i class="fi fi-ss-user"></i><a  style="color: rebeccapurple;">Profile</a></li>
+        </ul>
+      </aside>
+
+      <div class="middleContainer">
+
+        <h3 class="title">Profile</h3>
+
+        <div class="profileContainer">
+          <div class="profile">          
+            <div class="profileImageContainer">
+              <img id="profile" onerror="src='./media/qnct.png'"></img>
+            </div>
+            <div class="profileData">        
+              <h3>Welcome</h3>
+              <h2 id="username"></h2>
+              <p class="description" id="email"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="menuScroll">
+
+          <h4>My </h4>
+
+          <div class="switchDesign">
+            <ul id="optionSwitch">
+              <li class="menuItem selectedItem" id="questionButton">Questions</li>
+              <li class="menuItem" id="repliesButton">Replies</li>
+            </ul>  
+          </div>
+        </div>
+
+        <div class="contentPlace">
+          
+          <div class="error" id="error">
+            <div class="errorImg">
+              <img src="./media/nothing.png" alt="Empty">
+            </div>
+            <div class="errorText">
+              <h3 style="color: grey; font-weight: 400; text-align: center; font-size: 1rem;" id="errorText"></h3>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="submitContainer">
+          <button id="submit"><h5>Logout</h5></button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="built">
+      <h1>Never<br>Give up</h1>
+      <div class="builtText">With <i>LOVE</i> from <strong>JNTUK</strong></div>
+    </div>
+
+
+    <footer id="footer">
+
+      <div class="footerDetails">
+        <div class="footerLogo">
+          <img src="./media/qonnect.png" alt="">
+        </div>
+
+        <div class="footerLinks">
+          <div class="social">
+            <p>Quick Links</p>
+            <a href="about.html">About</a>
+            <a href="orders.html">My Questions</a>
+            <a>Profile</a>
+            <a href="faq.html">Groups</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footerEnd">
+        <p>All Uicons by <a href="https://www.flaticon.com/uicons">Flaticon</a></p>
+        <div class="documents">
+          
+          <a href="" title=""></a>
+          <a href="privacy.html" title="">Privacy Policy</a>
+          <a href="privacy.html" title="">Terms of Use</a>
+
+        </div>
+      </div>
+
+    </footer>
+
+  <script src="scripts/profile.js" type="module" charset="utf-8" async defer></script>
+  </div>
+</body>
+</html>

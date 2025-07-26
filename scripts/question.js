@@ -18,7 +18,7 @@ document.getElementById('tagsInput').addEventListener('keydown', function (e) {
     if (value && tagsCount < 5) {
       const tag = document.createElement('span');
       tag.className = 'tag';
-      tag.textContent = value;
+      tag.textContent = value.toLowerCase().replaceAll(" ", "-");
       tagInputContainer.append(tag);
       tagsInput.value = '';
       tag.onclick = function () {

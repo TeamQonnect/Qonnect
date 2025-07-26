@@ -1,4 +1,3 @@
-
 export function formatDoc(cmd, value=null) {
   if(value) {
     document.execCommand(cmd, false, value);
@@ -10,4 +9,8 @@ export function formatDoc(cmd, value=null) {
 export function addLink() {
   const url = prompt('Insert url');
   formatDoc('createLink', url);
+}
+
+export function review(text) {
+	
 }
