@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Qonnect • Profile</title>
+  <title>Qonnect • Groups</title>
   <link rel="icon" type="image/x-icon" href="./media/qnct.png">
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.2.0"></script>
-  <link rel="stylesheet" href="./styles/profile.css">
+  <link rel="stylesheet" href="./styles/groups.css">
   <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-chubby/css/uicons-solid-rounded.css'>  
   <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
   <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-brands/css/uicons-brands.css'>
@@ -42,59 +42,38 @@
           <li class="nav_li">MENU</li>
           <br>
           <li class="nav_li"><i class="fi fi-ss-home"></i><a href="">Home</a></li>
-          <li class="nav_li"><i class="fi fi-ss-employees"></i><a href="groups.html">Groups</a></li>
+          <li class="nav_li"><i class="fi fi-ss-employees"></i><a style="color: darkslateblue; font-weight: 600;">Groups</a></li>
           <li class="nav_li"><i class="fi fi-ss-info"></i><a href="about.html">About</a></li>
-          <li class="nav_li"><i class="fi fi-ss-user"></i><a  style="color: darkslateblue; font-weight: 600;">Profile</a></li>
+          <li class="nav_li"><i class="fi fi-ss-user"></i><a href="profile.html">Profile</a></li>
         </ul>
       </aside>
 
       <div class="middleContainer">
+        <main class="main-content">
+          <h3 class="title">Groups</h3>
 
-        <h3 class="title">Profile</h3>
+          <div id="groupList" class="group-list"></div>
 
-        <div class="profileContainer">
-          <div class="profile">          
-            <div class="profileImageContainer">
-              <img id="profile" src="./media/qnct.png" onerror="src='./media/qnct.png'"></img>
+          <div id="groupDetails">
+            <h3 id="groupTitle" class="group-title"></h3>
+            <p id="groupIntro" class="description"></p>
+            <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i>Back to all groups</button>
+
+            <div id="askSection" class="ask-question hidden">
+              <h4>What's on your mind</h4>
+              <textarea id="questionInput" rows="3" placeholder="Type here"></textarea>
+              <p class="description" id="postPrompt" style="color: red;"></p>
+              <button onclick="postQuestion()" id="submit">Send</button>
+              <br><br>
             </div>
-            <div class="profileData">        
-              <h3>Welcome</h3>
-              <h2 id="username"></h2>
-              <p class="description" id="email"></p>
-            </div>
-          </div>
-        </div>
 
-        <div class="menuScroll">
+            <div id="questionsContainer"></div>
 
-          <h4>My </h4>
-
-          <div class="switchDesign">
-            <ul id="optionSwitch">
-              <li class="menuItem selectedItem" id="questionButton">Questions</li>
-              <li class="menuItem" id="repliesButton">Replies</li>
-            </ul>  
-          </div>
-        </div>
-
-        <div class="contentPlace">
-          
-          <div class="error" id="error">
-            <div class="errorImg">
-              <img src="./media/nothing.png" alt="Empty">
-            </div>
-            <div class="errorText">
-              <h3 style="color: grey; font-weight: 400; text-align: center; font-size: 1rem;" id="errorText"></h3>
-            </div>
           </div>
 
-        </div>
-
-        <div class="submitContainer">
-          <button id="submit"><h5>Logout</h5></button>
-        </div>
-
+        </main>
       </div>
+
     </div>
 
     <div class="built">
@@ -102,6 +81,17 @@
       <div class="builtText">With <i>LOVE</i> from <strong>JNTUK</strong></div>
     </div>
 
+    <div class="modal-overlay" id="popup">
+      <div class="modal">
+        <div class="icon"><img src="./media/profiles/wink.png" alt="" id="icon"></div>
+        <h2 id="message">All Set!</h2>
+        <p id="messageBody">Your settings have been saved successfully.</p>
+        <div class="modal-buttons">
+          <button class="btn-secondary" id="cancelPrompt" onclick="hidePopup(false)">Cancel</button>
+          <button class="btn-primary" id="gotIt" onclick="hidePopup(true)">Got it</button>
+        </div>
+      </div>
+    </div>
 
     <footer id="footer">
 
@@ -134,7 +124,7 @@
 
     </footer>
 
-  <script src="scripts/profile.js" type="module" charset="utf-8" async defer></script>
+  <script src="scripts/groups.js"  charset="utf-8" async defer></script>
   </div>
 </body>
 </html>

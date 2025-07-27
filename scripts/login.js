@@ -27,6 +27,7 @@ if (window.localStorage.getItem("QonnectUserLogIn") === "false" || window.localS
 
 			window.localStorage.setItem("QonnectUserLogIn", "true");
 			window.localStorage.setItem("QonnectUser", auth.currentUser.email);
+			window.localStorage.setItem("QonnectUserName", auth.currentUser.displayName);
 			window.location.replace('question.html');
 
 		}).catch((error) => {

@@ -99,6 +99,7 @@ function updateName(){
     onAuthStateChanged(auth, (user) => {
       if (user) {
         window.localStorage.setItem("QonnectUser", user.email);
+        window.localStorage.setItem("QonnectUserName", user.displayName);
         let randomInteger = getRandomInt(1, 10);
         document.getElementById('profile').src= "./media/profiles/"+randomInteger+".png";
         document.getElementById('username').innerHTML = user.displayName;
