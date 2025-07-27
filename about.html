@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qonnect • About</title>
+  <link rel="icon" type="image/x-icon" href="./media/qnct.png">
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.2.0"></script>
+  <link rel="stylesheet" href="./styles/about.css">
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-chubby/css/uicons-solid-rounded.css'>  
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-brands/css/uicons-brands.css'>
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-straight/css/uicons-bold-straight.css'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+
+  <div class="container">
+    
+    <nav>
+      <div class="logoContainer">
+        <img id="logo1" src="./media/qnct.png"></img>
+        <img id="logo2" src="./media/qonnect.png"></img>
+      </div>
+      <div class="searchBar" id="searchBar">
+        <input type="search" id="searchInput" name="" placeholder="Search here">
+        <button id="search"><i class="fas fa-search"></i></button>
+      </div>
+      <div class="ask">
+        <button id="ask">Ask Question</button>
+      </div>
+      <div class="menu" id="mobileOptions">
+        <button id="search2"><i class="fas fa-search"></i></button>
+        <button id="menu"><i class="fi fi-ss-menu-burger"></i></button>
+      </div>
+    </nav>
+
+    <div class="middle">
+      <aside id="asideMenu">
+        <ul class="aside_list">
+          <li class="nav_li">MENU</li>
+          <br>
+          <li class="nav_li"><i class="fi fi-ss-home"></i><a href="">Home</a></li>
+          <li class="nav_li"><i class="fi fi-ss-employees"></i><a href="">Groups</a></li>
+          <li class="nav_li"><i class="fi fi-ss-info"></i><a  style="color: darkslateblue; font-weight: 600;">About</a></li>
+          <li class="nav_li"><i class="fi fi-ss-user"></i><a href="profile.html">Profile</a></li>
+        </ul>
+      </aside>
+
+      <div class="middleContainer">
+
+        <div class="about-page" style="font-family: 'Segoe UI', sans-serif; width: 100%; max-width: 900px; margin: 0; padding: 0; color: #333;">
+  
+          <div class="header" style="text-align: center; margin-bottom: 40px; display: flex; flex-direction: column; align-items: center;">
+            <h3 class="title">About</h3>
+
+            <div style="width: 100%; display: flex; align-items: center;justify-content: center; gap: 10px; flex-wrap: wrap;">
+              <img src="./media/teacher.png" alt="Qonnect Logo" style=" width: 40%; max-width: 80px; margin-bottom: 10px;">
+              <img src="./media/qonnect.png" alt="Qonnect Logo" style=" width: 80%; max-width: 180px; margin-bottom: 10px;">
+            </div>
+            <p style="font-size: 1.2em; color: #555;">Where students ask, answer & grow — together.</p>
+          </div>
+
+          <div class="intro" style="margin-bottom: 30px;">
+            <p style="font-size: 1.05em; line-height: 1.5;">
+              Qonnect is more than just a question-answer platform — it's your digital student lounge. Whether you’re tackling tricky subjects, looking for honest college reviews, or seeking advice from peers, Qonnect is the bridge between curiosity and clarity.
+            </p>
+          </div>
+
+          <div class="features" style="margin-bottom: 40px;">
+            <h2 style="font-size: 1.3em; margin-bottom: 15px;"><i class="fas fa-bolt" style="color: #f39c12;"></i> What You Can Do</h2>
+            <div class="aboutQuad">
+              <div><i class="fas fa-question-circle" style="color: #3498db;"></i> <strong>Ask Smart:</strong> Post questions — academic, personal, or college-related.</div>
+              <div><i class="fas fa-lightbulb" style="color: #e67e22;"></i> <strong>Answer Bold:</strong> Share your knowledge, help fellow students.</div>
+              <div><i class="fas fa-comments" style="color: #2ecc71;"></i> <strong>Engage:</strong> Join discussions and give your take on trending topics.</div>
+              <div><i class="fas fa-users" style="color: #9b59b6;"></i> <strong>Connect:</strong> Meet students across departments and colleges.</div>
+            </div>
+          </div>
+
+          <div class="why-us" style="margin-bottom: 40px;">
+            <h2 style="font-size: 1.5em; margin-bottom: 10px;"><i class="fas fa-heart" style="color: #e74c3c;"></i> Why Qonnect?</h2>
+            <p style="font-size: 1.05em; line-height: 1.6;">
+              Built by students, for students — Qonnect understands the real challenges of campus life. It’s fast, simple, and powered by the collective experiences of learners just like you. No clutter. No spam. Just pure student wisdom.
+            </p>
+          </div>
+
+          <div class="cta" style="text-align: center; background: #f0f8ff; padding: 30px; border-radius: 12px;">
+            <h2 style="font-size: 1.8em; color: #34495e;">Ready to Join the Qonnect Community?</h2>
+            <p style="font-size: 1.1em; margin: 15px 0;">
+              Ask your first question, answer someone’s doubt, or just explore the conversation.
+            </p>
+            <button id="getStarted">
+              Get Started
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="built">
+      <h1>Never<br>Give up</h1>
+      <div class="builtText">With <i>LOVE</i> from <strong>JNTUK</strong></div>
+    </div>
+
+
+    <footer id="footer">
+
+      <div class="footerDetails">
+        <div class="footerLogo">
+          <img src="./media/qonnect.png" alt="">
+        </div>
+
+        <div class="footerLinks">
+          <div class="social">
+            <p>Quick Links</p>
+            <a href="about.html">About</a>
+            <a href="profile.html">My Questions</a>
+            <a href="profile.html">Profile</a>
+            <a href="faq.html">Groups</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footerEnd">
+        <p>All Uicons by <a href="https://www.flaticon.com/uicons">Flaticon</a></p>
+        <div class="documents">
+          
+          <a title=""></a>
+          <a title="">Privacy Policy</a>
+          <a title="">Terms of Use</a>
+
+        </div>
+      </div>
+
+    </footer>
+
+  <script src="scripts/about.js" type="module" charset="utf-8" async defer></script>
+  </div>
+</body>
+</html>

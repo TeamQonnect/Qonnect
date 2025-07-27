@@ -64,7 +64,7 @@ nav{
 }
 
 #ask:hover{
-  background-color: rebeccapurple;
+  background-color: darkslateblue;
 }
 
 .logoContainer{
@@ -129,9 +129,9 @@ aside{
 
 .nav_li a{
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 1.1rem;
-  color: black;
+  color: lightsteelblue;
   font-family: 'Lato', serif;
   text-transform: uppercase;
   text-decoration-color: var(--primary-c);
@@ -143,12 +143,12 @@ aside{
 }
 
 .aside_list li a:hover{
-  color: rebeccapurple;
+  color: darkslateblue;
   font-weight: 600;
 }
 
 .aside_list li:hover{
-  color: rebeccapurple;
+  color: darkslateblue;
   transition-delay: 3s;
 }
 
@@ -170,7 +170,7 @@ aside{
 }
 
 .selected{
-  color: rebeccapurple;
+  color: darkslateblue;
 }
 
 .middle {
@@ -259,7 +259,6 @@ aside{
   color: mediumpurple;
   border: none;
   font-size: 1.5rem;
-  padding-top: 10px;
 }
 
 #search2:hover, #menu:hover{
@@ -433,7 +432,7 @@ hr{
 }
 
 #submit:hover{
-  background-color: rebeccapurple;
+  background-color: darkslateblue;
 }
 
 footer{
