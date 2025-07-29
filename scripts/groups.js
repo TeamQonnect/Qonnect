@@ -1,5 +1,24 @@
-const isLoggedIn = true; // Change to false to simulate guest mode
-let currentGroupId = null;
+const firebaseConfig = {
+  apiKey: "AIzaSyC2ZXOFbau1-_wqFAxJxanLTuAIiwbE8Yk",
+  authDomain: "team-qonnect.firebaseapp.com",
+  projectId: "team-qonnect",
+  storageBucket: "team-qonnect.firebasestorage.app",
+  messagingSenderId: "1081558162587",
+  appId: "1:1081558162587:web:827837d1d3dbcdf1c8ba3e"
+};
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signOut, signInWithPopup, getAdditionalUserInfo} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+import { getDatabase, runTransaction, ref, child, get, set, update, remove, goOffline } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs, addDoc, query, where, updateDoc, deleteDoc, deleteField, Timestamp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+import { enterGroup, updateList, getReplyingTo, getCurrentGroupId, likeQuestion, replyToQuestion, cancelReply } from '../scripts/groupHandler.js';
+
+var app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+const rdb = getDatabase(app);
+const db = getFirestore(app);
 
 const groups = [
   { id: 'gate', name: 'GATE ', intro: 'This group is for all students preparing for GATE . Share strategies, resources, and doubts related to the exam.' },
@@ -9,13 +28,38 @@ const groups = [
   { id: 'ssc', name: 'SSC CGL', intro: 'This is your space for SSC CGL preparation — Quant tricks, English, reasoning and more.' }
 ];
 
-const questionsData = {
-  gate: [{"email":"stylishcharan2@gmail.com", "name":"Charan Cherry", "text":"dfghdh","likes":0,"replies":[]},{"email":"stylishcharan2@gmail.com", "name":"Charan Cherry", "text":"dfhgdfghdfgh","likes":0,"replies":[]},{"email":"stylishcharan2@gmail.com", "name":"Charan Cherry", "text":"dfhdfghdfgh","likes":0,"replies":[]}],
-  upsc: [],
-  neet: [],
-  cat: [],
-  ssc: []
-};
+window.enterGroup = enterGroup;
+window.updateList = updateList;
+window.getCurrentGroupId = getCurrentGroupId;
+window.likeQuestion = likeQuestion;
+window.replyToQuestion = replyToQuestion;
+window.cancelReply = cancelReply;
+window.getReplyingTo = getReplyingTo;
+
+document.getElementById('questionInput').addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    event.preventDefault(); 
+    postQuestion();
+  }
+});
+
+document.getElementById('submit').addEventListener('click', function(event) {
+  postQuestion();
+});
+
+document.getElementById('cancelPrompt').addEventListener('click', function(event) {
+  hidePrompt(false);
+});
+
+document.getElementById('gotIt').addEventListener('click', function(event) {
+  hidePrompt(true);
+});
+
+document.getElementById('goBack').addEventListener('click', function(event) {
+  goBack();
+});
+
+
 
 function loadGroups() {
   const list = document.getElementById("groupList");
@@ -30,106 +74,111 @@ function loadGroups() {
   });
 }
 
-function enterGroup(groupId) {
-  document.getElementById("groupList").classList.add("hidden");
-  document.getElementById("groupDetails").classList.remove("hidden");
 
-  const group = groups.find(g => g.id === groupId);
-  document.getElementById("groupTitle").innerText = group.name;
-  document.getElementById("groupIntro").innerText = group.intro;
+async function postQuestion() {
 
-  currentGroupId = groupId;
-  const container = document.getElementById("questionsContainer");
-  container.innerHTML = '';
-  document.getElementById("askSection").classList.toggle("hidden", !isLoggedIn);
-  document.getElementById("questionInput").value = '';
+  if (window.localStorage.getItem("QonnectUserLogIn") === "false" || window.localStorage.getItem("QonnectUserLogIn") === null) {
+      //showPopup("Almost there", "Login to Post A Question", "cute.png");
+      console.log('error');
+  }else {
+    const input = document.getElementById("questionInput");
+    let text = input.value.trim();
+    if (review(text) && window.localStorage.getItem("QonnectUser") !== "") {
+          
+      document.getElementById('postPrompt').innerText = "";
+      if (!text) {
+        document.getElementById('postPrompt').innerText = "Please type something.";
+        return;
+      }
 
-  const questions = questionsData[groupId];
-  if (questions.length === 0) {
-    container.innerHTML = `
-      <div class="error" id="error">
-        <div class="errorImg">
-          <img src="./media/nothing.png" alt="Empty">
-        </div>
-        <div class="errorText">
-          <h3 style="color: grey; font-weight: 400; text-align: center; font-size: 1rem;" id="errorText">No conversation yet.<br>Start conversation through the text box</h3>
-        </div>
-      </div>
-    `;
-  } else {
-    questions.forEach((q, index) => {
-      const div = document.createElement("div");
-      div.className = "question-box";
-      div.innerHTML = `
-        <p class="name"> <span style="color:orange;">•</span> ${q.name}</p>
-        <div class="postContent">
-          <div class="post">
-            <p class="content">${q.text}</p>
-            <div class="question-actions">
-              ${isLoggedIn ? `
-                <button class="like" onclick="likeQuestion('${groupId}', ${index}, this)"><i class="fas fa-thumbs-up"></i> ${q.likes}</button>
-                ` :
-                `<i>Login to like or reply</i>`
-              }
-            </div>
-          </div>
-        </div>
-      `;
-// <button onclick="replyToQuestion('${groupId}', ${index})">💬 Reply</button>
+      // 1. Convert http(s):// links
+      text = text.replace(/(\bhttps?:\/\/[^\s]+)/gi, function (url) {
+        return `<a href="${url}" target="_blank">${url}</a>`;
+      });
 
-      container.appendChild(div);
-    });
+      // 2. Convert www. links (not preceded by http)
+      text = text.replace(/(^|[^\/])(www\.[^\s]+)/gi, function (_, prefix, url) {
+        const fullUrl = `http://${url}`;
+        return `${prefix}<a href="${fullUrl}" target="_blank">${url}</a>`;
+      });
+
+      // 3. Convert email addresses
+      text = text.replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}\b/gi, function (email) {
+        return `<a href="mailto:${email}">${email}</a>`;
+      });
+
+      let name = window.localStorage.getItem("QonnectUserName");
+      let email = window.localStorage.getItem("QonnectUser");
+
+      if (!name) {
+        name = "Team Qonnect";
+      }
+
+      let time = new Date().getTime();
+
+      const newQuestion = {id:'', replyTo: getReplyingTo(), time, email, name, text, likes: 0, replies: [] };
+
+
+      const docRef = doc(collection(db, getCurrentGroupId()));
+
+      let docID = docRef.id;
+
+      newQuestion['id'] = docID;
+
+      await setDoc(docRef, newQuestion).then(()=>{
+        updateList(newQuestion);
+      })
+      .catch((error)=>{
+        console.log('Error'+error);
+      });
+      input.value = '';
+    }
   }
 }
 
-function likeQuestion(groupId, index, btn) {
-  questionsData[groupId][index].likes += 1;
-  btn.innerHTML = `<i class="fas fa-thumbs-up"></i>  ${questionsData[groupId][index].likes}`;
-}
 
-function replyToQuestion(groupId, index) {
-  const reply = prompt("Enter your reply:");
-  if (reply) alert("Reply saved (feature under development)");
-}
 
-function postQuestion() {
-  const input = document.getElementById("questionInput");
-  let text = input.value.trim();
+/*async function loadDataById(id, callBack){
 
-  document.getElementById('postPrompt').innerText = "";
-  if (!text) {
-    document.getElementById('postPrompt').innerText = "Please type something.";
-    return;
+  let orders = [];
+
+  const db = getFirestore(app);
+  const usersCollection = collection(db, "orders");
+  const q = query(usersCollection, where("id", "==", String('FCOR'+id)), limit(5));
+  var querySnapshot = await getDocs(q);
+
+  if(querySnapshot.docs.length == 0){
+    callBack(orders);
   }
 
-  // 1. Convert http(s):// links
-  text = text.replace(/(\bhttps?:\/\/[^\s]+)/gi, function (url) {
-    return `<a href="${url}" target="_blank">${url}</a>`;
+  querySnapshot.forEach((doc) => {
+    try{
+      if (doc.data()) {
+        orders.push(doc.data());
+      }
+    }catch(err) {
+      console.log(err);
+    }
   });
+  callBack(orders);
+}*/
 
-  // 2. Convert www. links (not preceded by http)
-  text = text.replace(/(^|[^\/])(www\.[^\s]+)/gi, function (_, prefix, url) {
-    const fullUrl = `http://${url}`;
-    return `${prefix}<a href="${fullUrl}" target="_blank">${url}</a>`;
-  });
-
-  // 3. Convert email addresses
-  text = text.replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}\b/gi, function (email) {
-    return `<a href="mailto:${email}">${email}</a>`;
-  });
-
-  let name = window.localStorage.getItem("QonnectUserName");
-  let email = window.localStorage.getItem("QonnectUser");
-
-  if (!name) {
-    name = "Team Qonnect";
-  }
-
-  const newQuestion = { email, name, text, likes: 0, replies: [] };
-  questionsData[currentGroupId].unshift(newQuestion);
-  input.value = '';
-  enterGroup(currentGroupId); // Re-render
+function review(text) {
+  return true;
 }
+
+function getDate(dateStamp) {
+  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  
+  const d = new Date();
+  d.setTime(parseInt(dateStamp));
+
+  var date = d.getDate();
+  var month = months[d.getMonth()];
+  var year = d.getFullYear();
+  return `${date}-${month.toUpperCase()}-${year}`;
+}
+
 
 function goBack() {
   document.getElementById("groupDetails").classList.add("hidden");
@@ -137,4 +186,4 @@ function goBack() {
 }
 
 loadGroups();
-enterGroup('gate');
+// enterGroup('gate');

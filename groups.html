@@ -57,13 +57,13 @@
           <div id="groupDetails" class="hidden">
             <h3 id="groupTitle" class="group-title"></h3>
             <p id="groupIntro" class="description"></p>
-            <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i>Back to all groups</button>
+            <button class="back-btn" id="goBack"><i class="fas fa-arrow-left"></i>Back to all groups</button>
 
             <div id="askSection" class="ask-question hidden">
-              <h4>What's on your mind</h4>
-              <textarea id="questionInput" rows="3" placeholder="Type here"></textarea>
+              <h4 id="replyHead">What's on your mind</h4>
+              <textarea id="questionInput" rows="3" placeholder="Type here or Paste direct links"></textarea>
               <p class="description" id="postPrompt" style="color: red;"></p>
-              <button onclick="postQuestion()" id="submit">Send</button>
+              <button id="submit">Send</button>
               <br><br>
             </div>
 
@@ -87,8 +87,8 @@
         <h2 id="message">All Set!</h2>
         <p id="messageBody">Your settings have been saved successfully.</p>
         <div class="modal-buttons">
-          <button class="btn-secondary" id="cancelPrompt" onclick="hidePopup(false)">Cancel</button>
-          <button class="btn-primary" id="gotIt" onclick="hidePopup(true)">Got it</button>
+          <button class="btn-secondary" id="cancelPrompt">Cancel</button>
+          <button class="btn-primary" id="gotIt">Got it</button>
         </div>
       </div>
     </div>
@@ -124,7 +124,7 @@
 
     </footer>
 
-  <script src="scripts/groups.js"  charset="utf-8" async defer></script>
+  <script src="scripts/groups.js" type="module" charset="utf-8" async defer></script>
   </div>
 </body>
 </html>

@@ -291,7 +291,7 @@ aside{
   background: #fff;
   border: 3px solid lavender;
   border-radius: 10px;
-  min-width: 250px;
+  min-width: 200px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   text-align: center;
@@ -351,13 +351,14 @@ aside{
 
 .name{
   font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .post{
   background-color: white;
   padding: 5px;
   width: 100%;
-  border: 2px solid lavender;
+  border: 1px solid lavender;
   border-radius: 5px;
   word-wrap: break-word;
 }
@@ -366,22 +367,30 @@ aside{
   color: black;
   font-weight: 500;
   font-size: 0.8rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Lato', sans-serif;
   padding: 3px;
 }
 
 .question-actions {
+  display: flex;
   margin-top: 10px;
   font-size: 14px;
 }
 
 .like {
   border: none;
-  color: white;
   padding: 2px 6px;
-  background-color: darkslateblue;
+  background: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.like i{
+  color: #bbb;
+}
+
+.fas.fa-heart.liked{
+  color: red;
 }
 
 .like:hover{
