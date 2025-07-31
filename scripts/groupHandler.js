@@ -99,7 +99,7 @@ export function enterGroup(groupId) {
   let email = window.localStorage.getItem('QonnectUser');
 
   const questions = getQuestionsData(groupId);
-
+  console.log(questions);
   if (questions.length === 0) {
     container.innerHTML = `
       <div class="error" id="error">
@@ -123,7 +123,7 @@ export function enterGroup(groupId) {
               <p class="content">${(q.replyTo) ? `<a href="#${q.replyTo.id}">@${q.replyTo.name}</a>`: ``} ${q.text}</p>
               <div class="question-actions">
                 ${isLoggedIn ? `
-                  <button class="like" onclick="likeQuestion('${groupId}', ${index}, '${q.id}', this)"><i class="fas fa-heart ${q.liked ? `liked` : ``}" id="like${q.id}"></i> <span id="likeSpan${q.id}">${q.likes}</span></button>
+                  <button class="like" onclick="likeQuestion('${groupId}', ${index}, '${q.id}', this)"><i class="fas fa-heart ${q.likes.includes(window.localStorage.getItem("QonnectUser")) ? `liked` : ``}" id="like${q.id}"></i> <span id="likeSpan${q.id}">${q.likes.length ? q.likes.length : 0}</span></button>
                   <button class="like" onclick="replyToQuestion('${groupId}', ${index})"><i class="fas fa-reply"></i></button>
                   ${(q.email === email) ? `<button class="like" onclick="showPrompt('Are you sure?', 'Want to delete the text', 'trash.png', '${q.id}')"><i class="fas fa-trash-alt"></i></button>` : ``}      
                   <p class="like" style="font-size: 0.7rem; color: #aaa;">${formatTimeDifference(q.time)}</p>
@@ -184,15 +184,15 @@ export async function likeQuestion(groupId, index, id, btn) {
   document.getElementById(`like${id}`).classList.toggle('liked');
 
   if (document.getElementById(`like${id}`).classList.contains('liked')) {
-    getQuestionsData(getCurrentGroupId())[index].likes += 1;
+    getQuestionsData(getCurrentGroupId())[index].likes.push(window.localStorage.getItem("QonnectUser"));
   }else{
-    getQuestionsData(getCurrentGroupId())[index].likes -= 1;
+    let filteredArray = getQuestionsData(getCurrentGroupId())[index].likes.filter(obj => obj !== window.localStorage.getItem("QonnectUser")); // Removes object with id 2
+    getQuestionsData(getCurrentGroupId())[index].likes = filteredArray;
   }
   
   const docRef = doc(db, getCurrentGroupId(), id);
   await updateDoc(docRef, {
       likes: getQuestionsData(getCurrentGroupId())[index].likes,
-      liked: document.getElementById(`like${id}`).classList.contains('liked')
   });
 
   //document.getElementById(`likeSpan${id}`).innerHTML = getQuestionsData(getCurrentGroupId())[index].likes;

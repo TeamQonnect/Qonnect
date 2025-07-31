@@ -137,7 +137,7 @@ async function postQuestion() {
 
       let time = new Date().getTime();
 
-      const newQuestion = {id:'', replyTo: getReplyingTo(), time, email, name, text, likes: 0, replies: [] };
+      const newQuestion = {id:'', replyTo: getReplyingTo(), time, email, name, text, likes: []};
 
       const docRef = doc(collection(db, getCurrentGroupId()));
 
