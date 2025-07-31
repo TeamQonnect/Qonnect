@@ -12,7 +12,7 @@ import { getAuth, onAuthStateChanged, GoogleAuthProvider, signOut, signInWithPop
 import { getDatabase, runTransaction, ref, child, get, set, update, remove, goOffline } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
 import { getFirestore, doc, getDoc, setDoc, collection, getDocs, addDoc, query, where, updateDoc, deleteDoc, deleteField, Timestamp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-import { enterGroup, updateList, getReplyingTo, getCurrentGroupId, likeQuestion, replyToQuestion, cancelReply } from '../scripts/groupHandler.js';
+import { enterGroup, updateList, setData, removeItem, showPrompt, hidePrompt, getReplyingTo, getCurrentGroupId, likeQuestion, replyToQuestion, cancelReply, getData } from '../scripts/groupHandler.js';
 
 var app = initializeApp(firebaseConfig);
 
@@ -35,11 +35,36 @@ window.likeQuestion = likeQuestion;
 window.replyToQuestion = replyToQuestion;
 window.cancelReply = cancelReply;
 window.getReplyingTo = getReplyingTo;
+window.getData = getData;
+window.setData = setData;
+window.showPrompt = showPrompt;
+window.hidePrompt = hidePrompt;
+window.removeItem = removeItem;
 
 document.getElementById('questionInput').addEventListener('keydown', function(event) {
   if (event.key === 'Enter') {
     event.preventDefault(); 
     postQuestion();
+  }
+});
+
+document.getElementById('menu').addEventListener('click', function () {
+  if (!aside.checkVisibility()) {
+    aside.style.display = "flex";
+  }else {
+    aside.style.display = "none";
+  }
+});
+
+document.getElementById('search2').addEventListener('click', function () {
+  if (!searchBar.checkVisibility()) {
+    searchBar.style.display = "flex";
+    ask.style.display = "none";
+    search2.style.display = "none";
+  }else {
+    searchBar.style.display = "none";
+    ask.style.display = "flex";
+    search2.style.display = "flex";
   }
 });
 
@@ -49,10 +74,6 @@ document.getElementById('submit').addEventListener('click', function(event) {
 
 document.getElementById('cancelPrompt').addEventListener('click', function(event) {
   hidePrompt(false);
-});
-
-document.getElementById('gotIt').addEventListener('click', function(event) {
-  hidePrompt(true);
 });
 
 document.getElementById('goBack').addEventListener('click', function(event) {
@@ -68,7 +89,7 @@ function loadGroups() {
     div.className = "group-card";
     div.innerHTML = `
       <h4>${group.name}</h4>
-      <button onclick="enterGroup('${group.id}')">Explore <i class="fas fa-play"></i></button>
+      <button onclick="getData('${group.id}')">Explore <i class="fas fa-play"></i></button>
     `;
     list.appendChild(div);
   });
@@ -118,7 +139,6 @@ async function postQuestion() {
 
       const newQuestion = {id:'', replyTo: getReplyingTo(), time, email, name, text, likes: 0, replies: [] };
 
-
       const docRef = doc(collection(db, getCurrentGroupId()));
 
       let docID = docRef.id;
@@ -126,42 +146,14 @@ async function postQuestion() {
       newQuestion['id'] = docID;
 
       await setDoc(docRef, newQuestion).then(()=>{
-        updateList(newQuestion);
+        input.value = '';
       })
       .catch((error)=>{
         console.log('Error'+error);
       });
-      input.value = '';
     }
   }
 }
-
-
-
-/*async function loadDataById(id, callBack){
-
-  let orders = [];
-
-  const db = getFirestore(app);
-  const usersCollection = collection(db, "orders");
-  const q = query(usersCollection, where("id", "==", String('FCOR'+id)), limit(5));
-  var querySnapshot = await getDocs(q);
-
-  if(querySnapshot.docs.length == 0){
-    callBack(orders);
-  }
-
-  querySnapshot.forEach((doc) => {
-    try{
-      if (doc.data()) {
-        orders.push(doc.data());
-      }
-    }catch(err) {
-      console.log(err);
-    }
-  });
-  callBack(orders);
-}*/
 
 function review(text) {
   return true;
@@ -179,11 +171,12 @@ function getDate(dateStamp) {
   return `${date}-${month.toUpperCase()}-${year}`;
 }
 
-
 function goBack() {
   document.getElementById("groupDetails").classList.add("hidden");
   document.getElementById("groupList").classList.remove("hidden");
+  setData([]);
 }
 
 loadGroups();
+// getData('gate');
 // enterGroup('gate');

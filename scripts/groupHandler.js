@@ -34,46 +34,58 @@ const firebaseConfig = {
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signOut, signInWithPopup, getAdditionalUserInfo} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, collection, getDocs, addDoc, query, where, updateDoc, deleteDoc, deleteField, Timestamp, orderBy } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, getDocs, addDoc, query, where, updateDoc, deleteDoc, deleteField, Timestamp, orderBy } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
 var app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
+const db = getFirestore(app);
+const container = document.getElementById("questionsContainer");
+let oldHash = null;
+let deleteID = null;
 
-export async function getData(){
+const hashValueWithHash = window.location.hash;
+window.onhashchange = function() {
+    // Code to execute when the URL hash changes
+    const hash = window.location.hash.substring(1);
+    if (oldHash !== null) {
+      document.getElementById(oldHash).style.backgroundColor = '#fff';
+    }
+    document.getElementById(hash).style.backgroundColor = '#eee';
+    oldHash = hash;
+};
+
+export async function getData(currentGroupId){
+
+  setCurrentGroupId(currentGroupId);
     
     const timestamp = new Date().getTime() - 24 * 60 * 60 * 1000; // 24 hours ago
 
-    const db = getFirestore(app);
     const usersCollection = collection(db, currentGroupId);
-    const q = query(usersCollection, where("time", ">=", timestamp), orderBy("time", "desc"));
-    var querySnapshot = await getDocs(q);
-
-    if(querySnapshot.docs.length == 0){
-        return [];
-    }
-
-    querySnapshot.forEach((doc) => {
-        // console.log(doc.data());
-      try{
-        if (doc.data()) {
-          return doc.data();
+    const q = query(usersCollection, where("time", ">=", timestamp), orderBy("time", "asc"));
+    onSnapshot(q, (snapshot) => {
+      setData([]);
+      snapshot.forEach((doc) => {
+        try{
+          if (doc.data()) {
+            updateList(doc.data());
+            return;
+          }
+        }catch(err) {
         }
-      }catch(err) {
-      }
+      });
     });
-    
-    return [];
 
+    updateList(null);
 }
 
-export function setData(data){
-  questionsData = data;
+export function setData(data) {
+  questionsData[getCurrentGroupId()] = data;
 }
 
 export function enterGroup(groupId) {
 
-
+  container.innerHTML = '';
   document.getElementById("groupList").classList.add("hidden");
   document.getElementById("groupDetails").classList.remove("hidden");
 
@@ -81,17 +93,13 @@ export function enterGroup(groupId) {
   document.getElementById("groupTitle").innerText = group.name;
   document.getElementById("groupIntro").innerText = group.intro;
 
-  currentGroupId = groupId;
-  setCurrentGroupId(groupId);
-
-  const container = document.getElementById("questionsContainer");
-  container.innerHTML = '';
   document.getElementById("askSection").classList.toggle("hidden", !isLoggedIn);
   document.getElementById("questionInput").value = '';
 
   let email = window.localStorage.getItem('QonnectUser');
 
   const questions = getQuestionsData(groupId);
+
   if (questions.length === 0) {
     container.innerHTML = `
       <div class="error" id="error">
@@ -105,37 +113,62 @@ export function enterGroup(groupId) {
     `;
   } else {
     questions.forEach((q, index) => {
-      const div = document.createElement("div");
-      div.className = "question-box";
-      div.innerHTML = `
-        <p class="name"> <span style="color:orange;">•</span> ${q.name}</p>
-        <div class="postContent">
-          <div class="post" id="${q.id}">
-            <p class="content">${q.text}</p>
-            <div class="question-actions">
-              ${isLoggedIn ? `
-                <button class="like" onclick="likeQuestion('${groupId}', ${index}, this)"><i class="fas fa-heart" id="like${q.id}"></i> ${q.likes}</button>
-                <button class="like" onclick="replyToQuestion('${groupId}', ${index})"><i class="fas fa-reply"></i></button>
-                ${(q.email === email) ? `<button class="like" onclick="replyToQuestion('${groupId}', ${index})"><i class="fas fa-trash-alt"></i></button>` : ``}      
-                <p class="like" style="font-size: 0.7rem; color: #aaa;">${formatTimeDifference(q.time)}</p>
-                `:
-                `<i>Login to like or reply</i>`
-              }
+      if (q !== null && q !== undefined) {
+        const div = document.createElement("div");
+        div.className = "question-box";
+        div.innerHTML = `
+          <p class="name"> <span style="color:orange;">•</span> ${q.name}</p>
+          <div class="postContent">
+            <div class="post" id="${q.id}">
+              <p class="content">${(q.replyTo) ? `<a href="#${q.replyTo.id}">@${q.replyTo.name}</a>`: ``} ${q.text}</p>
+              <div class="question-actions">
+                ${isLoggedIn ? `
+                  <button class="like" onclick="likeQuestion('${groupId}', ${index}, '${q.id}', this)"><i class="fas fa-heart ${q.liked ? `liked` : ``}" id="like${q.id}"></i> <span id="likeSpan${q.id}">${q.likes}</span></button>
+                  <button class="like" onclick="replyToQuestion('${groupId}', ${index})"><i class="fas fa-reply"></i></button>
+                  ${(q.email === email) ? `<button class="like" onclick="showPrompt('Are you sure?', 'Want to delete the text', 'trash.png', '${q.id}')"><i class="fas fa-trash-alt"></i></button>` : ``}      
+                  <p class="like" style="font-size: 0.7rem; color: #aaa;">${formatTimeDifference(q.time)}</p>
+                  `:
+                  `<i>Login to like or reply</i>`
+                }
+              </div>
             </div>
           </div>
-        </div>
-      `;
-
-      container.appendChild(div);
+        `;
+        container.appendChild(div);
+      }
     });
   }
 }
 
 export function updateList(newQuestion){
-  document.getElementById('replyHead').innerHTML = `What's on your mind`;
-  getData();
-  questionsData[currentGroupId].unshift(newQuestion);
-  enterGroup(currentGroupId); // Re-render
+  cancelReply();
+  // document.getElementById('replyHead').innerHTML = `What's on your mind`;
+  if (newQuestion !== null && newQuestion !== undefined) {
+    questionsData[getCurrentGroupId()].unshift(newQuestion);
+  }
+  enterGroup(getCurrentGroupId());
+}
+
+export async function removeItem(id) {
+  const docRef = doc(db, getCurrentGroupId(), id);
+  try {
+    await deleteDoc(docRef).then(() => {
+      if (questionsData[getCurrentGroupId()].length === 0) {
+        container.innerHTML = `
+          <div class="error" id="error">
+            <div class="errorImg">
+              <img src="./media/nothing.png" alt="Empty">
+            </div>
+            <div class="errorText">
+              <h3 style="color: grey; font-weight: 400; text-align: center; font-size: 1rem;" id="errorText">No conversation yet.<br>Start conversation through the text box</h3>
+            </div>
+          </div>
+        `;
+      } 
+    });
+  } catch (error) {
+    console.error("Error removing document: ", error);
+  }
 }
 
 export function getCurrentGroupId(){
@@ -146,9 +179,24 @@ function setCurrentGroupId(groupId){
   currentGroupId = groupId;
 }
 
-export function likeQuestion(groupId, index, btn) {
-  questionsData[groupId][index].likes += 1;
-  btn.innerHTML = `<i class="fas fa-heart liked"></i>  ${questionsData[groupId][index].likes}`;
+export async function likeQuestion(groupId, index, id, btn) {
+
+  document.getElementById(`like${id}`).classList.toggle('liked');
+
+  if (document.getElementById(`like${id}`).classList.contains('liked')) {
+    getQuestionsData(getCurrentGroupId())[index].likes += 1;
+  }else{
+    getQuestionsData(getCurrentGroupId())[index].likes -= 1;
+  }
+  
+  const docRef = doc(db, getCurrentGroupId(), id);
+  await updateDoc(docRef, {
+      likes: getQuestionsData(getCurrentGroupId())[index].likes,
+      liked: document.getElementById(`like${id}`).classList.contains('liked')
+  });
+
+  //document.getElementById(`likeSpan${id}`).innerHTML = getQuestionsData(getCurrentGroupId())[index].likes;
+  // btn.innerHTML = `<i class="fas fa-heart liked" id="like${id}"></i>  ${questionsData[groupId][index].likes}`;
 }
 
 export function replyToQuestion(groupId, index) {
@@ -171,6 +219,24 @@ export function getReplyingTo(){
 
 export function setReplyingTo(replying) {
   replyingTo = replying;
+}
+
+export function showPrompt(message, body, image, id) {
+  deleteID = id;
+  document.getElementById("message").innerHTML = message;
+  document.getElementById("messageBody").innerHTML = body;
+  document.getElementById("icon").src = './media/'+image;
+  document.getElementById("popup").style.display = "flex";
+}
+
+export function hidePrompt(gotIt) {
+
+  if (gotIt && deleteID !== null && deleteID !== undefined) {
+    removeItem(deleteID);
+  }
+
+  document.getElementById('cancelPrompt').style.display = "flex";
+  document.getElementById("popup").style.display = "none";
 }
 
 function getQuestionsData(groupId){

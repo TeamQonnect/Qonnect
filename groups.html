@@ -7,7 +7,6 @@
   <link rel="icon" type="image/x-icon" href="./media/qnct.png">
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.2.0"></script>
   <link rel="stylesheet" href="./styles/groups.css">
-  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-chubby/css/uicons-solid-rounded.css'>  
   <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
   <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-brands/css/uicons-brands.css'>
   <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
@@ -84,11 +83,11 @@
     <div class="modal-overlay" id="popup">
       <div class="modal">
         <div class="icon"><img src="./media/profiles/wink.png" alt="" id="icon"></div>
-        <h2 id="message">All Set!</h2>
-        <p id="messageBody">Your settings have been saved successfully.</p>
+        <h2 id="message"></h2>
+        <p id="messageBody"></p>
         <div class="modal-buttons">
-          <button class="btn-secondary" id="cancelPrompt">Cancel</button>
-          <button class="btn-primary" id="gotIt">Got it</button>
+          <button class="btn-secondary" id="cancelPrompt" onclick="hidePrompt(false)">Cancel</button>
+          <button class="btn-primary" id="gotIt" onclick="hidePrompt(true)">Yes</button>
         </div>
       </div>
     </div>
