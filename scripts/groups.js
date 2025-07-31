@@ -182,5 +182,5 @@ function goBack() {
 }
 
 loadGroups();
-getData('gate');
+// getData('gate');
 // enterGroup('gate');
