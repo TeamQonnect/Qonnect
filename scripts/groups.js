@@ -41,6 +41,10 @@ window.showPrompt = showPrompt;
 window.hidePrompt = hidePrompt;
 window.removeItem = removeItem;
 
+const aside = document.getElementById('asideMenu');
+const searchBar = document.getElementById('searchBar');
+const search2 = document.getElementById('search2');
+
 document.getElementById('questionInput').addEventListener('keydown', function(event) {
   if (event.key === 'Enter') {
     event.preventDefault(); 
@@ -178,5 +182,5 @@ function goBack() {
 }
 
 loadGroups();
-// getData('gate');
+getData('gate');
 // enterGroup('gate');

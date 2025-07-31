@@ -83,8 +83,7 @@ function selectedOption(){
 
 function logOut(){
   signOut(auth).then(() => {
-    window.localStorage.setItem('QonnectUserLogIn', "false");
-    window.localStorage.setItem("QonnectUser", "");
+    window.localStorage.clear();
     window.location.replace('login.html');
   }).catch((error) => {
     showToast('Oops!! Please try again later');

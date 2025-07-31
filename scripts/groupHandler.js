@@ -7,7 +7,7 @@ const groups = [
   { id: 'ssc', name: 'SSC CGL', intro: 'This is your space for SSC CGL preparation — Quant tricks, English, reasoning and more.' }
 ];
 
-const isLoggedIn = true; // Change to false to simulate guest mode
+const isLoggedIn = (window.localStorage.getItem("QonnectUserLogIn") === "true"); // Change to false to simulate guest mode
 
 let currentGroupId = null;
 let isReplying = false;
@@ -54,6 +54,10 @@ window.onhashchange = function() {
     document.getElementById(hash).style.backgroundColor = '#eee';
     oldHash = hash;
 };
+
+if (isLoggedIn) {
+  document.getElementById('loginChat').style.display = 'none';
+}
 
 export async function getData(currentGroupId){
 

@@ -485,7 +485,7 @@ hr{
   align-items: center;
 }
 
-#submit{
+#submit, .loginChat{
   background: mediumpurple;
   color: white;
   border: none;
@@ -766,14 +766,14 @@ footer{
   .footerEnd{
     flex-direction: column;
   }
-/* 
+
   #logo2{
     display: none;
   }
 
   #logo1{
     display: flex;
-  } */
+  }
 
 }
 
