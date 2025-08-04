@@ -34,22 +34,40 @@ export async function getData(option){
 	if (checkValidUser(user) !== null) {
 
 		if (option === 0) {
+			/*setQuestionsData([{"id":"aIynFCTxzRztnViRT6jR","user":"stylishcharan2@gmail.com","tags":["a"],"name":"Charan Cherry","time":"1754315342868","description":"a\n          ","question":"a","votes":[]},{"user":"stylishcharan2@gmail.com","question":"sdfgsdfg","description":"sdfgsdfgsdf","id":"5LIeFFMPhgsShElWiBBK","name":"Charan Cherry","tags":["sdfg"],"time":"1754315331060","votes":[]},{"tags":["sdfgsdfg"],"votes":[],"question":"sfgsdf","name":"Charan Cherry","user":"stylishcharan2@gmail.com","id":"YrpOOa5lRibmCmPDrVx4","time":"1754276480084","description":"sdfgsdfg"},{"question":"qwerqwer","votes":[],"name":"Charan Cherry","id":"wPEqWSWN0soa320ypapN","user":"stylishcharan2@gmail.com","time":"1754276389104","tags":["qwerqwer"],"description":"qwerqwer"}]);
+			enterGroup(getQuestionsData(), 0);*/
 			const usersCollection = collection(db, "questions");
 		    const q = query(usersCollection, where("user", "==", user), orderBy("time", "asc"));
-		    onSnapshot(q, (snapshot) => {
-		      snapshot.forEach((doc) => {
-		        try{
-		          if (doc.data()) {
-		            updateList(doc.data());
-		          }
-		        }catch(err) {
-		        }
-		      });
-		      enterGroup(getQuestionsData(), 0);
-		  	});
+		    var querySnapshot = await getDocs(q);
+
+		    setQuestionsData([]);
+			querySnapshot.forEach((doc) => {
+				try{
+				  if (doc.data()) {
+				    updateList(doc.data());
+				  }
+				}catch(err) {
+				}
+			});
+		    enterGroup(getQuestionsData(), 0);
 		}else{
-		  	setQuestionsData([]);
-		  	enterGroup(getQuestionsData(), 1);
+/*			const usersCollection = collection(db, "replies");
+		    const q = query(usersCollection, where("user", "==", user), orderBy("time", "asc"));
+		    var querySnapshot = await getDocs(q);
+
+		    setQuestionsData([]);
+			querySnapshot.forEach((doc) => {
+				try{
+				  if (doc.data()) {
+				    updateList(doc.data());
+				  }
+				}catch(err) {
+				}
+			});
+		    enterGroup(getQuestionsData(), 1);*/
+		    
+		    setQuestionsData([]);
+		    enterGroup(getQuestionsData(), 1);
 		}
 
 	}else{
@@ -73,7 +91,6 @@ export function updateList(newQuestion){
 }
 
 export function enterGroup(questions, opt) {
-
   container.innerHTML = '';
   const email = window.localStorage.getItem("QonnectUser");
   if (questions.length === 0) {
@@ -94,7 +111,7 @@ export function enterGroup(questions, opt) {
 					</div>
 					<div class="question-actions">
 					${isLoggedIn ? `
-					  <button class="like" onclick=""><i class="fas fa-arrow-up" id="like${q.id}"></i> <span id="likeSpan${q.id}"></span><i style="color:lightgray; font-style: normal;"">${(q.votes.length ? q.votes.length : q.votes)} votes</i></button>
+					  <button class="like"><i class="fas fa-arrow-up" id="like${q.id}"></i> <span id="likeSpan${q.id}"></span><i style="color:lightgray; font-style: normal;"">${((typeof(q.votes)==="object") ? q.votes.length : q.votes)} votes</i></button>
 					  ${(q.user === email) ? `<button class="trash" onclick="showPrompt('Are you sure','Do you want to delete the post', 'trash.png', '${q.id}', ${index}, ${opt})"><i class="fas fa-trash-alt"></i><i >Delete</i></button>` : ``}      
 					  <p class="like" style="font-size: 0.7rem; color: #aaa;">${formatTimeDifference(q.time)} ago</p>
 					  `:
@@ -153,25 +170,15 @@ export async function removeItem(id) {
 	}else{
 		docRef = doc(db, "replies", id);
 	}
-  try {
-    await deleteDoc(docRef).then(() => {
-    	getQuestionsData().slice(index, 1);
-      if (getQuestionsData().length === 0) {
-        container.innerHTML = `
-          <div class="error" id="error">
-            <div class="errorImg">
-              <img src="./media/nothing.png" alt="Empty">
-            </div>
-            <div class="errorText">
-              <h3 style="color: grey; font-weight: 400; text-align: center; font-size: 1rem;" id="errorText">No conversation yet.<br>Start conversation through the text box</h3>
-            </div>
-          </div>
-        `;
-      } 
-    });
-  } catch (error) {
-    console.error("Error removing document: ", error);
-  }
+
+	try {
+		await deleteDoc(docRef).then(() => {
+			getQuestionsData().splice(index, 1);
+			enterGroup(getQuestionsData(), option);
+		});
+	} catch (error) {
+		console.error("Error removing document: ", error);
+	}
 }
 
 export function showPrompt(message, body, image, id, idx, opt) {
