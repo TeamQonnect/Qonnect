@@ -79,6 +79,11 @@
 
         <div class="contentPlace">
           
+          <div class="dataContainer" id="dataContainer">
+            
+          </div>
+
+
           <div class="error" id="error">
             <div class="errorImg">
               <img src="./media/nothing.png" alt="Empty">
@@ -102,7 +107,18 @@
       <div class="builtText">With<i>LOVE</i>from <strong>JNTUK</strong></div>
     </div>
 
-
+    <div class="modal-overlay" id="popup">
+      <div class="modal">
+        <div class="icon"><img src="./media/profiles/wink.png" alt="" id="icon"></div>
+        <h2 id="message"></h2>
+        <p id="messageBody"></p>
+        <div class="modal-buttons">
+          <button class="btn-secondary" id="cancelPrompt" onclick="hidePrompt(false)">Cancel</button>
+          <button class="btn-primary" id="gotIt" onclick="hidePrompt(true)">Yes</button>
+        </div>
+      </div>
+    </div>
+    
     <footer id="footer">
 
       <div class="footerDetails">

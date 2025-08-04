@@ -19,9 +19,18 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebas
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signOut, signInWithPopup, getAdditionalUserInfo} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 import { getDatabase, runTransaction, ref, child, get, set, update, remove, goOffline } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
 
+import { getData, isLoggedIn, showPrompt, hidePrompt, removeItem } from '../scripts/profileHandler.js';
+
+
 var app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
+
+window.getData = getData;
+window.isLoggedIn = isLoggedIn;
+window.showPrompt = showPrompt;
+window.hidePrompt = hidePrompt;
+window.removeItem = removeItem;
 
 updateName();
 
@@ -74,10 +83,12 @@ function selectedOption(){
     document.getElementById('errorText').innerHTML = `You asked no questions yet.<br>Have a doubt? <a href="question.html">Ask a question</a>`;
     document.getElementById('questionButton').classList.add('selectedItem');
     document.getElementById('repliesButton').classList.remove('selectedItem');
+    getData(0);
   }else{
     document.getElementById('errorText').innerHTML = `You have't replied to any questions yet.<br>Help peers with your suggestions <a href="index.html">Visit Home</a>`;
     document.getElementById('questionButton').classList.remove('selectedItem');
     document.getElementById('repliesButton').classList.add('selectedItem');
+    getData(1);
   }
 }
 

@@ -59,49 +59,53 @@ export function hidePopup(gotIt) {
 	document.getElementById("popup").style.display = "none";
 }
 
-export function postQuestion(question, description, tags){
+export async function postQuestion(question, description, tags){
 	if (window.localStorage.getItem("QonnectUserLogIn") === "false" || window.localStorage.getItem("QonnectUserLogIn") === null) {
 	    showPopup("Almost there", "Login to Post A Question", "cute.png");
 	}else {
 		if (review(description) && window.localStorage.getItem("QonnectUser") !== "") {
 			document.getElementById('gotIt').innerHTML = "Continue";
 			document.getElementById('cancelPrompt').style.display = "none";
-			showPopup("Hurray!!!", "Question posted. Visit <a href='profile.html'>Profile</a> to view your question", "party.png");
-			runTransaction(child(ref(rdb), 'numericals/questionNo'), (currentValue) => {
-					return currentValue+1;
-			}).then((result) => {
+			document.getElementById('addToCartLoader').style.display = 'flex';
+			document.getElementById('submit').style.display = 'none';
 
-				let questionID = 'QT'+String(result.snapshot.val()).padStart(5, '0');
-				const ques = {
-					id: questionID,
-					user: window.localStorage.getItem("QonnectUser"),
-					question: question,
-					description: description,
-					tags: tags,
-					time: String(new Date().getTime()),
-					votes: 0
-				};
+			const ques = {
+				id: '',
+				name: window.localStorage.getItem("QonnectUserName"),
+				user: window.localStorage.getItem("QonnectUser"),
+				question: question,
+				description: description,
+				tags: tags,
+				time: String(new Date().getTime()),
+				votes: []
+			};
 
-				if (ques) {
+			if (ques) {
 
-					var reff = doc(db, "questions", questionID);
+				const docRef = doc(collection(db, "questions"));
 
-					const docRef = setDoc(reff, ques)
-					.then(()=>{
-					})
-					.catch((error)=>{
-						console.log('Error'+error);
-						document.getElementById('gotIt').innerHTML == "Okay";
-						showPopup("Oops!! Something went wrong", "Question not posted. Try again later", "10.png");
-					});
-				}else{
+				let docID = docRef.id;
+
+				ques['id'] = docID;
+
+				await setDoc(docRef, ques)
+				.then(()=>{
+					showPopup("Hurray!!!", "Question posted. Visit <a href='profile.html'>Profile</a> to view your question", "party.png");
+				})
+				.catch((error)=>{
+					console.log('Error'+error);
+					document.getElementById('addToCartLoader').style.display = 'none';
+					document.getElementById('submit').style.display = 'flex';
 					document.getElementById('gotIt').innerHTML == "Okay";
 					showPopup("Oops!! Something went wrong", "Question not posted. Try again later", "10.png");
-				}
+				});
+			}else{
+				document.getElementById('gotIt').innerHTML == "Okay";
+				document.getElementById('addToCartLoader').style.display = 'none';
+				document.getElementById('submit').style.display = 'flex';
+				showPopup("Oops!! Something went wrong", "Question not posted. Try again later", "10.png");
+			}
 
-			}).catch((err)=>{
-				console.log(err);
-			});
 
 		}
 	}
