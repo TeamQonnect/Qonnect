@@ -40,7 +40,6 @@ let comments = [];
 let container = document.getElementById("dataContainer");
 document.getElementById('postQuestion').innerHTML = (isLoggedIn) ? 'Post Comment' : "Login to Comment";
 
-
 if (!qid || qid === null || qid === undefined) {
   error.style.display = 'flex';
   document.getElementById('contentPlace').style.display = 'none';
@@ -55,6 +54,9 @@ if (!qid || qid === null || qid === undefined) {
     document.getElementById('question').innerHTML = docSnap.data().question;
     document.getElementById('questionDescription').innerHTML = docSnap.data().description;
     document.getElementById('voteCount').innerHTML = docSnap.data().votes.length;
+    document.getElementById('creditsLink').href = "index.html?by="+docSnap.data().user;
+    document.getElementById('creditsLink').innerText = docSnap.data().name;
+    document.getElementById('time').innerHTML = formatTimeDifference(docSnap.data().time) + ' ago';
     votes = docSnap.data().votes;
     comments = ((typeof( docSnap.data().comments)==="object") ? docSnap.data().comments : []);
     checkVote();
@@ -123,6 +125,12 @@ document.getElementById('questionInput').addEventListener('keydown', function(ev
 document.getElementById('postQuestion').addEventListener('click', ()=>{
 
   addComment();
+
+});
+
+document.getElementById('report').addEventListener('click', ()=>{
+
+  sendMail();
 
 });
 
@@ -276,4 +284,16 @@ async function addComment(){
       document.getElementById('commentPrompt').innerHTML = "Type something";
     }
   }
+}
+
+function sendMail() {
+    var recipient = "teamqonnect10@gmail.com";
+    var subject = "Reporting issue on ID: "+qid;
+    var body = "Reporting on"+qid+': ';
+
+    var mailtoLink = "mailto:" + recipient +
+                     "?subject=" + encodeURIComponent(subject) +
+                     "&body=" + encodeURIComponent(body);
+
+    window.location.href = mailtoLink;
 }
