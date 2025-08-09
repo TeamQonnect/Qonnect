@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qonnect • Profile</title>
+  <link rel="icon" type="image/x-icon" href="./media/qnct.png">
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.2.0"></script>
+  <link rel="stylesheet" href="./styles/view.css">
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-chubby/css/uicons-solid-rounded.css'>  
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-brands/css/uicons-brands.css'>
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-straight/css/uicons-bold-straight.css'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="container">
+    
+    <nav>
+      <div class="logoContainer">
+        <img id="logo1" src="./media/qnct.png"></img>
+        <img id="logo2" src="./media/qonnect.png"></img>
+      </div>
+      <div class="searchBar" id="searchBar">
+        <input type="search" id="searchInput" name="" placeholder="Search here">
+        <button id="search"><i class="fas fa-search"></i></button>
+      </div>
+      <div class="ask">
+        <button id="ask">Ask Question</button>
+      </div>
+      <div class="menu" id="mobileOptions">
+        <button id="search2"><i class="fas fa-search"></i></button>
+        <button id="menu"><i class="fi fi-ss-menu-burger"></i></button>
+      </div>
+    </nav>
+
+    <div class="middle">
+      <aside id="asideMenu">
+        <ul class="aside_list">
+          <li class="nav_li">MENU</li>
+          <br>
+          <li class="nav_li"><i class="fi fi-ss-home"></i><a href="index.html">Home</a></li>
+          <li class="nav_li"><i class="fi fi-ss-employees"></i><a href="groups.html">Groups</a></li>
+          <li class="nav_li"><i class="fi fi-ss-info"></i><a href="about.html">About</a></li>
+          <li class="nav_li"><i class="fi fi-ss-user"></i><a  href="profile.html">Profile</a></li>
+        </ul>
+      </aside>
+
+      <div class="middleContainer">
+
+        <div class="contentPlace" id="contentPlace">
+          <div style="background-color: white; box-shadow: 1px 1px 12px #00000020; border-radius: 5px; width: 100%; word-wrap: break-word; padding: 10px;">
+            <h3 id="question" style="width: 100%; margin-bottom: 10px; font-size: 1.5rem; color: darkslateblue; font-weight: 800; font-family: 'Lato', sans-serif;"></h3>
+
+            <div id="questionDescription" style="font-size: 0.9rem; width: 100%; word-wrap: break-word; overflow: hidden;"></div>
+                <br>
+                <div class="question-actions">
+                  <button class="like" id="vote"><i class="fas fa-arrow-up"></i> <span id="voteCount"></span><i style="font-style: normal;" > Upvote</i></button>
+                  <button class="like" id="comment"><i class="fas fa-comment"></i> <span></span><i style="color:lightgray; font-style: normal;">Comment</i></button>
+                  <button class="like" id="report"><i class="fas fa-warning"></i> <span></span><i style="color:lightgray; font-style: normal;">Report</i></button>
+            </div>
+            <div>
+              <h3 class="title" style="color: black; font-weight: 600; font-size: 1.20rem; margin-bottom: 15px;"><span id="commentsCount"></span> Comments</h3>
+            </div>
+            <div class="dataContainer" id="dataContainer">
+              <h5 class="description" id="noComment" style="text-align: center;">Be the first to comment</h5>
+            </div>
+          </div>
+
+          <div class="commentBox">
+
+            <div class="questionBox">
+              <textarea id="questionInput" rows="4" placeholder="Write a comment"></textarea>
+              <h4 id="commentPrompt" style="color: red;"></h4>
+              <button id="postQuestion" class="styledPostButton">Login to Comment</button>
+            </div>
+
+          </div>
+        </div>
+
+          <div class="error" id="error">
+            <div class="errorImg">
+              <img id="errorI" src="./media/nothing.png" alt="Empty">
+            </div>
+            <div class="errorText">
+              <h3 style="color: grey; font-weight: 400; text-align: center; font-size: 1rem;" id="errorText"></h3>
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="built">
+      <h1>Never<br>Give up</h1>
+      <div class="builtText">With<i>LOVE</i>from <strong>JNTUK</strong></div>
+    </div>
+
+    <div class="modal-overlay" id="popup">
+      <div class="modal">
+        <div class="icon"><img src="./media/profiles/wink.png" alt="" id="icon"></div>
+        <h2 id="message"></h2>
+        <p id="messageBody"></p>
+        <div class="modal-buttons">
+          <button class="btn-secondary" id="cancelPrompt" onclick="hidePrompt(false)">Cancel</button>
+          <button class="btn-primary" id="gotIt">Yes</button>
+        </div>
+      </div>
+    </div>
+    
+    <footer id="footer">
+
+      <div class="footerDetails">
+        <div class="footerLogo">
+          <img src="./media/qonnect.png" alt="">
+        </div>
+
+        <div class="footerLinks">
+          <div class="social">
+            <p>Quick Links</p>
+            <a href="about.html">About</a>
+            <a href="profile.html">My Questions</a>
+            <a href="profile.html">Profile</a>
+            <a href="faq.html">Groups</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footerEnd">
+        <p>All Uicons by <a href="https://www.flaticon.com/uicons">Flaticon</a></p>
+        <div class="documents">
+          
+          <a title=""></a>
+          <a title="">Privacy Policy</a>
+          <a title="">Terms of Use</a>
+
+        </div>
+      </div>
+
+    </footer>
+
+  <script src="scripts/view.js" type="module" charset="utf-8" async defer></script>
+  </div>
+</body>
+</html>

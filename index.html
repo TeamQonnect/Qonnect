@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Qonnect • Groups</title>
+  <title>Qonnect • Home</title>
   <link rel="icon" type="image/x-icon" href="./media/qnct.png">
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.2.0"></script>
-  <link rel="stylesheet" href="./styles/groups.css">
+  <link rel="stylesheet" href="./styles/index.css">
+  <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-chubby/css/uicons-solid-rounded.css'>  
   <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
   <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-brands/css/uicons-brands.css'>
   <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
@@ -16,6 +17,7 @@
 <body>
 
   <div class="container">
+    
     <nav>
       <div class="logoContainer">
         <img id="logo1" src="./media/qnct.png"></img>
@@ -39,42 +41,51 @@
         <ul class="aside_list">
           <li class="nav_li">MENU</li>
           <br>
-          <li class="nav_li"><i class="fi fi-ss-home"></i><a href="index.html">Home</a></li>
-          <li class="nav_li"><i class="fi fi-ss-employees"></i><a style="color: darkslateblue; font-weight: 600;">Groups</a></li>
+          <li class="nav_li"><i class="fi fi-ss-home"></i><a style="color: darkslateblue; font-weight: 600;">Home</a></li>
+          <li class="nav_li"><i class="fi fi-ss-employees"></i><a href="groups.html">Groups</a></li>
           <li class="nav_li"><i class="fi fi-ss-info"></i><a href="about.html">About</a></li>
           <li class="nav_li"><i class="fi fi-ss-user"></i><a href="profile.html">Profile</a></li>
         </ul>
       </aside>
 
       <div class="middleContainer">
-        <main class="main-content">
-          <h3 class="title">Groups</h3>
 
-          <div id="groupList" class="group-list"></div>
+        <div class="contentPlace">
+          
+          <h3 class="title">Home</h3>
 
-          <div id="groupDetails" class="hidden">
-            <h3 id="groupTitle" class="group-title"></h3>
-            <p id="groupIntro" class="description"></p>
-            <button class="back-btn" id="goBack"><i class="fas fa-arrow-left"></i>Back to all groups</button>
+          <div class="tagsScroll">
+            
+            <div class="tagsContainer">
+              
+              <div class="tag" id="latest" onclick="window.location.href='index.html?sort=latest'">Latest</div>
+              <div class="tag" id="oldest" onclick="window.location.href='index.html?sort=oldest'">Oldest</div>
+              <div class="tag" id="popular" onclick="window.location.href='index.html?sort=popular'">Popular</div>
 
-            <div style="width: 100%; height: 50px; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;" id="loginChat">
-              <button class="loginChat" style="margin: 10px;" onclick="window.location.href='login.html'">Login To Chat</button>
             </div>
-            <div id="askSection" class="ask-question hidden">
-              <h4 id="replyHead">What's on your mind</h4>
-              <textarea id="questionInput" rows="3" placeholder="Type here or Paste direct links"></textarea>
-              <p class="description" id="postPrompt" style="color: red;"></p>
-              <button id="submit">Send</button>
-              <br><br>
-            </div>
-
-            <div id="questionsContainer"></div>
 
           </div>
 
-        </main>
-      </div>
+          <div class="dataContainer" id="dataContainer">
+            
+          </div>
 
+          <div class="error" id="error">
+            <div class="errorImg">
+              <img src="./media/nothing.png" alt="Empty">
+            </div>
+            <div class="errorText">
+              <h3 style="color: grey; font-weight: 400; text-align: center; font-size: 1rem;" id="errorText">No Posts Found</h3>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="submitContainer">
+          <button id="submit"><h5>More</h5></button>
+        </div>
+
+      </div>
     </div>
 
     <div class="built">
@@ -93,7 +104,7 @@
         </div>
       </div>
     </div>
-
+    
     <footer id="footer">
 
       <div class="footerDetails">
@@ -125,7 +136,7 @@
 
     </footer>
 
-  <script src="scripts/groups.js" type="module" charset="utf-8" async defer></script>
+  <script src="scripts/index.js" type="module" charset="utf-8" async defer></script>
   </div>
 </body>
 </html>

@@ -1,9 +1,11 @@
+
 const tagInputContainer = document.getElementById('tag-input-container');
 const aside = document.getElementById('asideMenu');
 const searchBar = document.getElementById('searchBar');
 const search2 = document.getElementById('search2');
 const ask = document.getElementById('ask');
 
+let currentOption = 1;
 
 const firebaseConfig = {
   apiKey: "AIzaSyC2ZXOFbau1-_wqFAxJxanLTuAIiwbE8Yk",
@@ -18,10 +20,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebas
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signOut, signInWithPopup, getAdditionalUserInfo} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 import { getDatabase, runTransaction, ref, child, get, set, update, remove, goOffline } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
 
-import { getData, isLoggedIn, showPrompt, hidePrompt, removeItem } from '../scripts/profileHandler.js';
+import { getData, isLoggedIn, showPrompt, hidePrompt, removeItem } from '../scripts/indexHandler.js';
 
 
-var app = initializeApp(firebaseConfig);
+var app = initializeApp(firebaseConfig);			
 
 const auth = getAuth(app);
 
@@ -30,20 +32,6 @@ window.isLoggedIn = isLoggedIn;
 window.showPrompt = showPrompt;
 window.hidePrompt = hidePrompt;
 window.removeItem = removeItem;
-
-const params = new URLSearchParams(window.location.search);
-const option = params.get('option');
-
-if (!option || option === null ||option === undefined) {
-  window.location.replace('profile.html?option=1');
-}
-
-
-let currentOption = option;
-
-updateName();
-
-selectedOption();
 
 document.getElementById('menu').addEventListener('click', function () {
   if (!aside.checkVisibility()) {
@@ -67,14 +55,6 @@ document.getElementById('search2').addEventListener('click', function () {
 
 ask.addEventListener('click', ()=> {
   window.location.href = "question.html";
-});
-
-document.getElementById('optionSwitch').addEventListener('click', () => {
-  selectChoice();
-});
-
-document.getElementById('submit').addEventListener('click', () => {
-  logOut();
 });
 
 function selectChoice(){
@@ -101,39 +81,5 @@ function selectedOption(){
   }
 }
 
-function logOut(){
-  signOut(auth).then(() => {
-    window.localStorage.clear();
-    window.location.replace('login.html');
-  }).catch((error) => {
-    showToast('Oops!! Please try again later');
-  });
-}
-
-function updateName(){
-  const user = auth.currentUser;
-  if (window.localStorage.getItem("QonnectUserLogIn") === "false" || window.localStorage.getItem("QonnectUserLogIn") === null) {
-    window.location.replace('login.html');
-  }else {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        window.localStorage.setItem("QonnectUser", user.email);
-        window.localStorage.setItem("QonnectUserName", user.displayName);
-        let randomInteger = getRandomInt(1, 10);
-        document.getElementById('profile').src= "./media/profiles/"+randomInteger+".png";
-        document.getElementById('username').innerHTML = user.displayName;
-        document.getElementById('email').innerHTML = user.email;
-      } else {
-        // No user is signed in.
-        console.log("No user signed in.");
-      }
-    });    
-  }
-}
-
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+getData();
 

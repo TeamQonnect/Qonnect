@@ -77,7 +77,9 @@ export async function postQuestion(question, description, tags){
 				description: description,
 				tags: tags,
 				time: String(new Date().getTime()),
-				votes: []
+				popularity: 0,
+				votes: [],
+				comments: []
 			};
 
 			if (ques) {

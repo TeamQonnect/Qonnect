@@ -10,7 +10,7 @@ const firebaseConfig = {
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signOut, signInWithPopup, getAdditionalUserInfo} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, getDocs, addDoc, query, where, updateDoc, deleteDoc, deleteField, Timestamp, orderBy } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, limit, onSnapshot, collection, getDocs, addDoc, query, where, updateDoc, deleteDoc, deleteField, Timestamp, orderBy } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
 var app = initializeApp(firebaseConfig);
 
@@ -23,56 +23,45 @@ let index = 0;
 let container = document.getElementById("dataContainer");
 const error = document.getElementById("error");
 
+const params = new URLSearchParams(window.location.search);
+let sort = params.get('sort');
+
+
+if (!sort) {
+  window.location.replace('index.html?sort=latest');
+}
+
+document.getElementById(sort).classList.add('selected');
+
 export async function getData(option){
 
-	if (!isLoggedIn) {
-		window.location.replace("login.html");
-	}
+		// setQuestionsData([{"time":"1754731099579","user":"stylishcharan2@gmail.com","name":"Charan Cherry","id":"GJXvhadP1NmPpoo1ncMA","question":"Hello","tags":["hello"],"description":"Helsdfohiildfhioholsdf ilowfo.h.efio;hhef io;ji;cri; qerp; uiop qwerio qweril;hl;wehiozdnk,iwrjioqwerynioyniopqweryniopqhljk.wetukrt jkuhkty8oyoqwty89yio tvukj rt jk qwetbyiobyioqwefby89iptvui..5t ioueryiiowetbyioioqwtweru8 8o uibyiowt89popr8&nbsp; o8e 89 u8o ;rtn8opupt89pu9p u890&nbsp; 90ru90 9' u90p[mr0p[er 9[&nbsp; &nbsp;-i0 werym-09[ey m9090ty 9 ty 9- i0ty i]-0 i0 -rt 9- rt i0 rt i-0 erur[","votes":[]}]);
+		const usersCollection = collection(db, "questions");
+		let q = null;
 
-	const user = window.localStorage.getItem("QonnectUser");
+    if(sort === 'latest') {
+     q = query(usersCollection, orderBy("time", "asc"), limit(10));
+    }else if(sort === 'oldest'){
+     q = query(usersCollection, orderBy("time", "desc"), limit(10));
+    }else if (sort === 'popular') {
+     q = query(usersCollection, orderBy("popularity", "desc"), limit(10));
+    }else{
+     q = query(usersCollection, limit(10));
+    }
 
-	if (checkValidUser(user) !== null) {
+		var querySnapshot = await getDocs(q);
 
-		if (option === 0) {
-			/*setQuestionsData([{"id":"aIynFCTxzRztnViRT6jR","user":"stylishcharan2@gmail.com","tags":["a"],"name":"Charan Cherry","time":"1754315342868","description":"a\n          ","question":"a","votes":[]},{"user":"stylishcharan2@gmail.com","question":"sdfgsdfg","description":"sdfgsdfgsdf","id":"5LIeFFMPhgsShElWiBBK","name":"Charan Cherry","tags":["sdfg"],"time":"1754315331060","votes":[]},{"tags":["sdfgsdfg"],"votes":[],"question":"sfgsdf","name":"Charan Cherry","user":"stylishcharan2@gmail.com","id":"YrpOOa5lRibmCmPDrVx4","time":"1754276480084","description":"sdfgsdfg"},{"question":"qwerqwer","votes":[],"name":"Charan Cherry","id":"wPEqWSWN0soa320ypapN","user":"stylishcharan2@gmail.com","time":"1754276389104","tags":["qwerqwer"],"description":"qwerqwer"}]);
-			enterGroup(getQuestionsData(), 0);*/
-			const usersCollection = collection(db, "questions");
-		    const q = query(usersCollection, where("user", "==", user), orderBy("time", "asc"));
-		    var querySnapshot = await getDocs(q);
+		setQuestionsData([]);
+		querySnapshot.forEach((doc) => {
+			try{
+			  if (doc.data()) {
+			    updateList(doc.data());
+			  }
+			}catch(err) {
+			}
+		});
 
-		    setQuestionsData([]);
-			querySnapshot.forEach((doc) => {
-				try{
-				  if (doc.data()) {
-				    updateList(doc.data());
-				  }
-				}catch(err) {
-				}
-			});
-		    enterGroup(getQuestionsData(), 0);
-		}else{
-/*			const usersCollection = collection(db, "replies");
-		    const q = query(usersCollection, where("user", "==", user), orderBy("time", "asc"));
-		    var querySnapshot = await getDocs(q);
-
-		    setQuestionsData([]);
-			querySnapshot.forEach((doc) => {
-				try{
-				  if (doc.data()) {
-				    updateList(doc.data());
-				  }
-				}catch(err) {
-				}
-			});
-		    enterGroup(getQuestionsData(), 1);*/
-		    
-		    setQuestionsData([]);
-		    enterGroup(getQuestionsData(), 1);
-		}
-
-	}else{
-		console.error("Invalid User");
-	}	
+		enterGroup(getQuestionsData(), 0);
 }
 
 export function isLoggedIn(){
@@ -107,17 +96,18 @@ export function enterGroup(questions, opt) {
             <div class="post" id="${q.id}" onclick="window.location.href='view.html?id=${q.id}'">
 					<p class="content-head">${q.question}</p>
 					<div class="content">
-					${(q.description.length > 200) ? `${(q.description).slice(0, 200)}...<br><a href="view.html?id=${q.id}">Read more</a>` : q.description}
+					${(q.description.length > 500) ? `${(q.description).slice(0, 500)}...<br><a href='view.html?id=${q.id}'>Read more</a>` : q.description}
 					</div>
 					<div class="question-actions">
+          <br>
 					${isLoggedIn ? `
-					  <button class="like"><i class="fas fa-arrow-up" id="like${q.id}"></i> <span id="likeSpan${q.id}"></span><i style="color:lightgray; font-style: normal;"">${((typeof(q.votes)==="object") ? q.votes.length : q.votes)} votes</i></button>
-					  ${(q.user === email) ? `<button class="trash" onclick="showPrompt('Are you sure','Do you want to delete the post', 'trash.png', '${q.id}', ${index}, ${opt})"><i class="fas fa-trash-alt"></i><i >Delete</i></button>` : ``}      
-					  <p class="like" style="font-size: 0.7rem; color: #aaa;">${formatTimeDifference(q.time)} ago</p>
+					  <button class="like"><i class="fas fa-arrow-up" id="like${q.id}"></i> <span id="likeSpan${q.id}"></span><i style="color:lightgray; font-style: normal;">${((typeof(q.votes)==="object") ? q.votes.length : q.votes)} votes</i></button>
+					  <button class="like" onclick="window.location.href='view.html?id=${q.id}'"><i class="fas fa-comment"></i> <span id="likeSpan${q.id}"></span><i style="color:lightgray; font-style: normal;">${((typeof(q.comments)==="object") ? q.comments.length : (q.comments) ? q.comments : 0)} Comments</i></button>      
 					  `:
 					  `<i>Login to like or reply</i>`
 					}
-				</div>
+					<p class="like" style="font-size: 0.7rem; color: #aaa;">${formatTimeDifference(q.time)} ago</p>
+			</div>
             </div>
           </div>
         `;
