@@ -25,13 +25,14 @@ const error = document.getElementById("error");
 
 const params = new URLSearchParams(window.location.search);
 let sort = params.get('sort');
+let by = params.get('by');
 
 
-if (!sort) {
+if (!sort && !by) {
   window.location.replace('index.html?sort=latest');
 }
 
-document.getElementById(sort).classList.add('selected');
+if(sort) document.getElementById(sort).classList.add('selected');
 
 export async function getData(option){
 
@@ -45,7 +46,9 @@ export async function getData(option){
      q = query(usersCollection, orderBy("time", "desc"), limit(10));
     }else if (sort === 'popular') {
      q = query(usersCollection, orderBy("popularity", "desc"), limit(10));
-    }else{
+    }else if (by){
+	 q = query(userCollection, where("user", "==", by), limit(10));
+	}else{
      q = query(usersCollection, limit(10));
     }
 
@@ -189,4 +192,5 @@ export function hidePrompt(gotIt) {
 
   document.getElementById('cancelPrompt').style.display = "flex";
   document.getElementById("popup").style.display = "none";
+
 }
