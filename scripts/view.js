@@ -56,7 +56,7 @@ if (!qid || qid === null || qid === undefined) {
     document.getElementById('questionDescription').innerHTML = docSnap.data().description;
     document.getElementById('voteCount').innerHTML = docSnap.data().votes.length;
     votes = docSnap.data().votes;
-    comments = docSnap.data().comments;
+    comments = ((typeof( docSnap.data().comments)==="object") ? docSnap.data().comments : []);
     checkVote();
     commentsDisplay();
 
@@ -107,11 +107,17 @@ document.getElementById('gotIt').addEventListener('click', ()=>{
             comments: comments,
             popularity: votes.length + comments.length
         }).then(()=>{
-          console.log(comments, id);
           commentsDisplay();
         });
       }
   });
+});
+
+document.getElementById('questionInput').addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    event.preventDefault(); 
+    addComment();
+  }
 });
 
 document.getElementById('postQuestion').addEventListener('click', ()=>{
@@ -119,7 +125,6 @@ document.getElementById('postQuestion').addEventListener('click', ()=>{
   addComment();
 
 });
-
 
 async function upvote(id) {
 
@@ -163,8 +168,10 @@ function commentsDisplay() {
   rearrange(email);
   if (comments.length === 0) {
     document.getElementById('commentsCount').innerHTML = "";
+    document.getElementById("noc").style.display = 'block';
     error.style.display = 'flex';
   } else {
+    document.getElementById("noc").style.display = 'none';
     document.getElementById('commentsCount').innerHTML = comments.length;
     error.style.display = 'none';
     comments.forEach((q, index) => {

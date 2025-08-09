@@ -408,7 +408,7 @@ hr{
 }
 
 .post:hover{
-  background-color: lavender;
+  /* background-color: lavender; */
 }
 
 .content-head{
@@ -416,6 +416,11 @@ hr{
   font-size:0.92rem;
   font-family: 'Poppins', sans-serif;
   padding: 5px 0;
+  cursor: pointer;
+}
+
+.content-head:hover{
+  text-decoration: underline;
 }
 
 .content{
@@ -424,6 +429,7 @@ hr{
   font-size: 0.8rem;
   font-family: 'Lato', sans-serif;
   padding: 3px 0;
+  cursor: pointer;
 }
 
 .question-actions {

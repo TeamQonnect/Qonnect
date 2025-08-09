@@ -104,9 +104,9 @@ export function enterGroup(questions, opt) {
         div.innerHTML = `
           <p class="name"><span style="color:orange;">•</span> ${(q.name) ? q.name : "Anonymous"}</p>
           <div class="postContent">
-            <div class="post" id="${q.id}" onclick="window.location.href='view.html?id=${q.id}'">
-					<p class="content-head">${q.question}</p>
-					<div class="content">
+            <div class="post" id="${q.id}">
+					<p class="content-head" onclick="window.location.href='view.html?id=${q.id}'">${q.question}</p>
+					<div class="content" onclick="window.location.href='view.html?id=${q.id}'">
 					${(q.description.length > 200) ? `${(q.description).slice(0, 200)}...<br><a href="view.html?id=${q.id}">Read more</a>` : q.description}
 					</div>
 					<div class="question-actions">
