@@ -312,11 +312,12 @@ async function addComment(){
 function sendMail() {
     var recipient = "teamqonnect10@gmail.com";
     var subject = "Reporting issue on ID: "+qid;
-    var body = "Reporting on"+qid+': ';
+    var body = "Reporting "+qid+': ';
 
     var mailtoLink = "mailto:" + recipient +
                      "?subject=" + encodeURIComponent(subject) +
                      "&body=" + encodeURIComponent(body);
 
     window.location.href = mailtoLink;
+
 }
