@@ -61,7 +61,7 @@ export function hidePopup(gotIt) {
 
 export async function postQuestion(question, description, tags){
 	if (window.localStorage.getItem("QonnectUserLogIn") === "false" || window.localStorage.getItem("QonnectUserLogIn") === null) {
-	    showPopup("Almost there", "Login to Post A Question", "cute.png");
+	    showPopup("Almost there", "Login to Post A Question", "profiles/cute.png");
 	}else {
 		if (review(description) && window.localStorage.getItem("QonnectUser") !== "") {
 			document.getElementById('gotIt').innerHTML = "Continue";

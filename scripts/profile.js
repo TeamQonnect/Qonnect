@@ -104,7 +104,7 @@ function selectedOption(){
 function logOut(){
   signOut(auth).then(() => {
     window.localStorage.clear();
-    window.location.replace('login.html');
+    window.location.replace('index.html');
   }).catch((error) => {
     showToast('Oops!! Please try again later');
   });

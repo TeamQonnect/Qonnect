@@ -51,7 +51,7 @@ export async function getData(option){
 			});
 		    enterGroup(getQuestionsData(), 0);
 		}else{
-/*			const usersCollection = collection(db, "replies");
+			const usersCollection = collection(db, "replies");
 		    const q = query(usersCollection, where("user", "==", user), orderBy("time", "asc"));
 		    var querySnapshot = await getDocs(q);
 
@@ -64,9 +64,6 @@ export async function getData(option){
 				}catch(err) {
 				}
 			});
-		    enterGroup(getQuestionsData(), 1);*/
-		    
-		    setQuestionsData([]);
 		    enterGroup(getQuestionsData(), 1);
 		}
 
@@ -97,30 +94,50 @@ export function enterGroup(questions, opt) {
     error.style.display = 'flex';
   } else {  
     error.style.display = 'none';
+
     questions.forEach((q, index) => {
       if (q !== null && q !== undefined) {
         const div = document.createElement("div");
         div.className = "question-box";
-        div.innerHTML = `
-          <p class="name"><span style="color:orange;">•</span> ${(q.name) ? q.name : "Anonymous"}</p>
-          <div class="postContent">
-            <div class="post" id="${q.id}">
-					<p class="content-head" onclick="window.location.href='view.html?id=${q.id}'">${q.question}</p>
-					<div class="content" onclick="window.location.href='view.html?id=${q.id}'">
-					${(q.description.length > 200) ? `${(q.description).slice(0, 200)}...<br><a href="view.html?id=${q.id}">Read more</a>` : q.description}
-					</div>
-					<div class="question-actions">
-					${isLoggedIn ? `
-					  <button class="like"><i class="fas fa-arrow-up" id="like${q.id}"></i> <span id="likeSpan${q.id}"></span><i style="color:lightgray; font-style: normal;"">${((typeof(q.votes)==="object") ? q.votes.length : q.votes)} votes</i></button>
-					  ${(q.user === email) ? `<button class="trash" onclick="showPrompt('Are you sure','Do you want to delete the post', 'trash.png', '${q.id}', ${index}, ${opt})"><i class="fas fa-trash-alt"></i><i >Delete</i></button>` : ``}      
-					  <p class="like" style="font-size: 0.7rem; color: #aaa;">${formatTimeDifference(q.time)} ago</p>
-					  `:
-					  `<i>Login to like or reply</i>`
-					}
-				</div>
-            </div>
-          </div>
-        `;
+	    if (opt === 0) {
+	    	div.innerHTML = `
+		          <p class="name"><span style="color:orange;">•</span> ${(q.name) ? q.name : "Anonymous"}</p>
+		          <div class="postContent">
+		            <div class="post" id="${q.id}">
+							<p class="content-head" onclick="window.location.href='view.html?id=${q.id}'">${q.question}</p>
+							<div class="content" onclick="window.location.href='view.html?id=${q.id}'">
+							${(q.description.length > 200) ? `${(q.description).slice(0, 200)}...<br><a href="view.html?id=${q.id}">Read more</a>` : q.description}
+							</div>
+							<div class="question-actions">
+							${isLoggedIn ? `
+							  <button class="like"><i class="fas fa-arrow-up" id="like${q.id}"></i> <span id="likeSpan${q.id}"></span><i style="color:lightgray; font-style: normal;"">${((typeof(q.votes)==="object") ? q.votes.length : q.votes)} votes</i></button>
+							  ${(q.user === email) ? `<button class="trash" onclick="showPrompt('Are you sure','Do you want to delete the post', 'trash.png', '${q.id}', ${index}, ${opt})"><i class="fas fa-trash-alt"></i><i >Delete</i></button>` : ``}      
+							  <p class="like" style="font-size: 0.7rem; color: #aaa;">${formatTimeDifference(q.time)} ago</p>
+							  `:
+							  `<i>Login to like or reply</i>`
+							}
+						</div>
+		            </div>
+		          </div>
+		        `;
+	    }else{
+	    	div.innerHTML = `
+	          <p class="name"><span style="color:orange;">•</span> ${(q.name) ? q.name : "Anonymous"}</p>
+	          <div class="postContent">
+	            <div class="post">
+	            <p class="content-head" onclick="window.location.href='view.html?id=${q.question}'">${q.title}</p>
+	          <div class="content" onclick="window.location.href='view.html?id=${q.question}'">
+	          ${q.comment}
+	          </div>
+	          <div class="question-actions">
+	            <p class="like" style="font-size: 0.7rem; color: #aaa;">${formatTimeDifference(q.time)} ago</p>
+	          </div>
+	        </div>
+	            </div>
+	          </div>
+	        `;
+	    }
+        
         container.appendChild(div);
       }
     });

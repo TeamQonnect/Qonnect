@@ -28,7 +28,7 @@ if (window.localStorage.getItem("QonnectUserLogIn") === "false" || window.localS
 			window.localStorage.setItem("QonnectUserLogIn", "true");
 			window.localStorage.setItem("QonnectUser", auth.currentUser.email);
 			window.localStorage.setItem("QonnectUserName", auth.currentUser.displayName);
-			window.location.replace('question.html');
+			window.location.replace('index.html');
 
 		}).catch((error) => {
 			const errorCode = error.code;
@@ -37,5 +37,5 @@ if (window.localStorage.getItem("QonnectUserLogIn") === "false" || window.localS
 	});
 
 }else {
-	window.location.replace('question.html');
+	window.location.replace('index.html');
 }

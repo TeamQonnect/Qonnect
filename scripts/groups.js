@@ -44,6 +44,11 @@ window.removeItem = removeItem;
 const aside = document.getElementById('asideMenu');
 const searchBar = document.getElementById('searchBar');
 const search2 = document.getElementById('search2');
+const ask = document.getElementById('ask');
+
+ask.addEventListener('click', ()=> {
+  window.location.href = "question.html";
+});
 
 document.getElementById('questionInput').addEventListener('keydown', function(event) {
   if (event.key === 'Enter') {

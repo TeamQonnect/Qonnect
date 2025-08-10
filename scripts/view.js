@@ -19,8 +19,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebas
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signOut, signInWithPopup, getAdditionalUserInfo} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, getDocs, addDoc, query, where, updateDoc, deleteDoc, deleteField, Timestamp, orderBy } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-import { showPrompt, hidePrompt, removeItem } from "./viewHandler.js";
+import { showPopup, showPrompt, hidePrompt, removeItem } from "./viewHandler.js";
 
+window.showPopup = showPopup;
 window.showPrompt = showPrompt;
 window.hidePrompt = hidePrompt;
 window.removeItem = removeItem;
@@ -36,6 +37,7 @@ const qid = params.get('id');
 const error = document.getElementById("error");
 let votes = [];
 let comments = [];
+let title = '';
 
 let container = document.getElementById("dataContainer");
 document.getElementById('postQuestion').innerHTML = (isLoggedIn) ? 'Post Comment' : "Login to Comment";
@@ -51,7 +53,9 @@ if (!qid || qid === null || qid === undefined) {
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     error.style.display = 'none';
-    document.getElementById('question').innerHTML = docSnap.data().question;
+    title = docSnap.data().question;
+    document.title = title + ' • Qonnect';
+    document.getElementById('question').innerHTML = title;
     document.getElementById('questionDescription').innerHTML = docSnap.data().description;
     document.getElementById('voteCount').innerHTML = docSnap.data().votes.length;
     document.getElementById('creditsLink').href = "index.html?by="+docSnap.data().user;
@@ -95,16 +99,24 @@ ask.addEventListener('click', ()=> {
 });
 
 document.getElementById('vote').addEventListener('click', ()=>{
-  upvote(qid);
+  if (window.localStorage.getItem("QonnectUserLogIn") === "false" || window.localStorage.getItem("QonnectUserLogIn") === null) {
+      showPopup("Almost there", "Login to Post A Question", "profiles/wink.png");
+  }else {
+    upvote(qid);
+  }
 });
 
 document.getElementById('gotIt').addEventListener('click', ()=>{
   hidePrompt(true, async (id, done)=>{
       if (done) {
-
-        comments.splice(id, 1);
-
         const docRef = doc(db, "questions", qid);
+      try{
+        const repRef = doc(db, "replies", comments[id].id);
+        await deleteDoc(repRef);
+      }catch(e){
+        console.log(e);
+      }
+        comments.splice(id, 1);
         await updateDoc(docRef, {
             comments: comments,
             popularity: votes.length + comments.length
@@ -135,7 +147,6 @@ document.getElementById('report').addEventListener('click', ()=>{
 });
 
 async function upvote(id) {
-
   document.getElementById(`vote`).classList.toggle('liked');
 
   if (!votes.includes(window.localStorage.getItem("QonnectUser"))) {
@@ -261,6 +272,9 @@ async function addComment(){
 
       let comment = {
 
+        question: qid,
+        title: title,
+        id: '',
         name: window.localStorage.getItem("QonnectUserName"),
         user: window.localStorage.getItem("QonnectUser"),
         comment: text.value.trim(),
@@ -270,13 +284,22 @@ async function addComment(){
 
       comments.push(comment);
 
+
+      const repRef = doc(collection(db, "replies"));
+      comment.id = repRef.id;
+      await setDoc(repRef, comment)
+      .then(()=>{
+        commentsDisplay();
+      });
+
       const docRef = doc(db, "questions", qid);
       await updateDoc(docRef, {
           comments: comments,
           popularity: votes.length + comments.length
       }).then(()=>{
-        commentsDisplay();
       });
+
+
 
       document.getElementById('commentPrompt').innerHTML = "";
       text.value = '';

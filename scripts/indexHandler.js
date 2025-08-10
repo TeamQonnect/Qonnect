@@ -27,8 +27,7 @@ const params = new URLSearchParams(window.location.search);
 let sort = params.get('sort');
 let by = params.get('by');
 
-
-if (!sort && !by) {
+if (!by && !sort) {
   window.location.replace('index.html?sort=latest');
 }
 
@@ -41,14 +40,14 @@ export async function getData(option){
 		let q = null;
 
     if(sort === 'latest') {
-     q = query(usersCollection, orderBy("time", "asc"), limit(10));
-    }else if(sort === 'oldest'){
      q = query(usersCollection, orderBy("time", "desc"), limit(10));
+    }else if(sort === 'oldest'){
+     q = query(usersCollection, orderBy("time", "asc"), limit(10));
     }else if (sort === 'popular') {
      q = query(usersCollection, orderBy("popularity", "desc"), limit(10));
-    }else if (by){
-	 q = query(userCollection, where("user", "==", by), limit(10));
-	}else{
+    }else if (by) {
+     q = query(usersCollection, where("user", "==", by), limit(10));
+    }else{
      q = query(usersCollection, limit(10));
     }
 
@@ -78,7 +77,7 @@ export function checkValidUser(str){
 
 export function updateList(newQuestion){
   if (newQuestion !== null && newQuestion !== undefined) {
-    data.unshift(newQuestion);
+    data.push(newQuestion);
   }
 }
 
@@ -87,8 +86,16 @@ export function enterGroup(questions, opt) {
   const email = window.localStorage.getItem("QonnectUser");
   if (questions.length === 0) {
     error.style.display = 'flex';
+      document.getElementById('title').innerHTML = 'Home';
   } else {  
     error.style.display = 'none';
+
+    if (by) {
+      document.getElementById('title').innerHTML = 'From <br><span style="color:orange;">•</span> <strong  style="font-weight: 800; color: slateblue;">'+questions[0].name+'</strong>';
+    }else{
+      document.getElementById('title').innerHTML = 'Home';
+    }
+
     questions.forEach((q, index) => {
       if (q !== null && q !== undefined) {
         const div = document.createElement("div");
@@ -192,5 +199,4 @@ export function hidePrompt(gotIt) {
 
   document.getElementById('cancelPrompt').style.display = "flex";
   document.getElementById("popup").style.display = "none";
-
 }

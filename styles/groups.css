@@ -52,7 +52,7 @@ nav{
 }
 
 #ask{
-  display: none;
+  display: block;
   border: none;
   background: mediumpurple;
   padding: 10px;
