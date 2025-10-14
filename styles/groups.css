@@ -749,6 +749,14 @@ footer{
 
 
 @media screen and (max-width: 550px) {
+  
+  #logo2{
+    display: none;
+  }
+
+  #logo1{
+    display: flex;
+  }
 
   .footerDetails{
     flex-direction: column;
@@ -765,14 +773,6 @@ footer{
 
   .footerEnd{
     flex-direction: column;
-  }
-
-  #logo2{
-    display: none;
-  }
-
-  #logo1{
-    display: flex;
   }
 
 }
@@ -800,7 +800,7 @@ footer{
     overflow: scroll;
   }
 
-  .searchBar {
+  #ask{
     display: none;
   }
 

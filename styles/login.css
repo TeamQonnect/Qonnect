@@ -230,6 +230,80 @@ body, html {
   background-color: #efefef;
 }
 
+/* Popup overlay */
+.overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+/* Popup box */
+.popup {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  width: 300px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.inPop{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  text-align: center;
+}
+
+.inPop input{
+  padding: 10px 5px;
+  text-transform: uppercase;
+}
+
+#check{
+  border: none;
+  background: mediumpurple;
+  padding: 10px;
+  height: 40px;
+  border-radius: 5px;
+  color: white;
+  font-weight: 500;
+  font-family: 'Lato', sans-serif;
+  cursor: pointer;
+}
+
+#check:hover{
+  background-color: darkslateblue;
+}
+
+#cancel{
+  border: none;
+  background: none;
+  padding: 8px 10px;
+  border-radius: 5px;
+  color: rgb(255, 1, 1);
+  font-weight: 500;
+  font-family: 'Lato', sans-serif;
+  cursor: pointer;
+}
+
+#cancel:hover{
+  background-color: rgb(254, 13, 13);
+  color: white;
+}
+
 @media screen and (max-width: 1150px){
   .right{
     justify-content: start;
