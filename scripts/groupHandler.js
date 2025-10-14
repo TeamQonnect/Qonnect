@@ -95,6 +95,7 @@ const hashValueWithHash = window.location.hash;
 window.onhashchange = function() {
     // Code to execute when the URL hash changes
     const hash = window.location.hash.substring(1);
+    document.getElementById("searchBar").style.display = 'none';
     if (oldHash !== null) {
       document.getElementById(oldHash).style.backgroundColor = '#fff';
     }
@@ -137,6 +138,7 @@ export function setData(data) {
 export function enterGroup(groupId) {
 
   container.innerHTML = '';
+  document.getElementById("searchBar").style.display = 'none';
   document.getElementById("groupList").classList.add("hidden");
   document.getElementById("groupDetails").classList.remove("hidden");
 

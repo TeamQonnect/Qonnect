@@ -130,6 +130,7 @@ document.getElementById('goBack').addEventListener('click', function(event) {
 
 function loadGroups(branches) {
   const list = document.getElementById("groupList");
+  document.getElementById("searchBar").style.display = 'flex';
   branches.forEach(group => {
     const div = document.createElement("div");
     div.className = "group-card";
@@ -219,6 +220,7 @@ function getDate(dateStamp) {
 function goBack() {
   document.getElementById("groupDetails").classList.add("hidden");
   document.getElementById("groupList").classList.remove("hidden");
+  document.getElementById("searchBar").style.display = 'flex';
   setData([]);
 }
 
@@ -242,17 +244,24 @@ function filterBranches() {
     branches.push(branch);
   });
 
-  console.log(branches);
   loadGroups(branches);
 }
 
+document.getElementById('searchInput').addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    filterBranches(); // Call your function
+  }
+});
 
 document.getElementById('search').addEventListener('click', ()=>{
   filterBranches();
 });
 
-
 document.getElementById('search2').addEventListener('click', ()=>{
+  filterBranches();
+});
+
+document.getElementById('searchInput').addEventListener('input', (event) => {
   filterBranches();
 });
 
