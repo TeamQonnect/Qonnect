@@ -74,12 +74,11 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, getAdditionalUserInfo} fr
 import { getDatabase, runTransaction, ref, child, get, set, update, remove, goOffline } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
 
 var app = initializeApp(firebaseConfig);
+const provider = new GoogleAuthProvider();
+const auth = getAuth(app);
+const db = getDatabase(app);
 
 if (window.localStorage.getItem("QonnectUserLogIn") === "false" || window.localStorage.getItem("QonnectUserLogIn") === null) {
-
-	const provider = new GoogleAuthProvider();
-	const auth = getAuth(app);
-	const db = getDatabase(app);
 
 	const googleLogin = document.getElementById('google-login');
 	googleLogin.addEventListener('click', ()=>{
@@ -133,4 +132,5 @@ function checkBranch() {
 	}
 
 	closePopup();
+
 }
